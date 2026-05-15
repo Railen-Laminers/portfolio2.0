@@ -1,0 +1,51 @@
+// src/data/timelineData.js
+export const TIMELINE = [
+    {
+        year: "2019",
+        title: "the beginning",
+        body: "Write what started here. The first thing you made or became. What it felt like from the inside.",
+        tag: "ORIGIN",
+        accent: "#d4c9e8",
+        note: "...it was smaller than i expected.",
+    },
+    {
+        year: "2020",
+        title: "a quiet period",
+        body: "Something that happened slowly. A shift you only noticed later. Time that felt like waiting but wasn't.",
+        tag: "TRANSITION",
+        accent: "#e8cdd4",
+        note: null,
+    },
+    {
+        year: "2021",
+        title: "the first real thing",
+        body: "A project, a decision, a person. Something that changed the shape of what came after it.",
+        tag: "MILESTONE",
+        accent: "#c8d9c4",
+        note: "...this one mattered.",
+    },
+    {
+        year: "2022",
+        title: "learning to unlearn",
+        body: "A period of undoing. Of finding out what you actually believed versus what you'd been told to believe.",
+        tag: "GROWTH",
+        accent: "#c4d4e8",
+        note: null,
+    },
+    {
+        year: "2023",
+        title: "something that broke, then held",
+        body: "Describe a difficulty and what it made possible afterward. The cracked thing that became stronger.",
+        tag: "CHAPTER",
+        accent: "#d4c9e8",
+        note: "...still carrying this one.",
+    },
+    {
+        year: "2024",
+        title: "now / ongoing",
+        body: "What you're in the middle of. What you're still figuring out. The unfinished sentence.",
+        tag: "PRESENT",
+        accent: "#e8cdd4",
+        note: "...",
+    },
+];

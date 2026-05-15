@@ -1,50 +1,609 @@
+/* ============================================================
+   OMORI-INSPIRED PORTFOLIO — index.css
+   Tailwind base + all custom CSS for the full design system
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&family=Space+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 
-/* Firefox */
-* {
-    scrollbar-width: thin;
-    scrollbar-color: #000 #f5f5f0;
+/* ─── CSS CUSTOM PROPERTIES ──────────────────────────────────── */
+
+:root {
+    /* Core monochrome palette */
+    --ink: #1a1a1a;
+    --void: #2d2b28;
+    --fog: #9a9690;
+    --smudge: #c4bfb0;
+    --ash: #e8e4d9;
+    --bone: #f5f2eb;
+    --paper: #faf8f3;
+
+    /* Pastel accent quartet */
+    --lav: #d4c9e8;
+    /* surreal / dream / hover       */
+    --blush: #e8cdd4;
+    /* memory / warmth / About        */
+    --sage: #c8d9c4;
+    /* growth / nature / Journey      */
+    --sky: #c4d4e8;
+    /* distance / longing / Contact   */
+
+    /* Typography */
+    --font-display: 'IM Fell English', Georgia, 'Times New Roman', serif;
+    --font-title: 'Special Elite', 'Courier New', monospace;
+    --font-body: 'Crimson Pro', Georgia, 'Times New Roman', serif;
+    --font-mono: 'Space Mono', 'Courier New', monospace;
+
+    /* Spacing rhythm */
+    --section-pad: clamp(3rem, 8vh, 7rem);
+    --container: 72rem;
+    /* max-w-6xl equivalent */
+
+    /* Motion */
+    --ease-dream: cubic-bezier(0.25, 0.1, 0.25, 1);
+    --dur-slow: 0.7s;
+    --dur-mid: 0.35s;
+    --dur-fast: 0.18s;
 }
 
-/* Chrome / Edge / Safari */
-::-webkit-scrollbar {
-    width: 8px;
+
+/* ─── BASE RESET / GLOBAL ─────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    background-color: var(--bone);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Cursor — subtle crosshair to echo sketchbook grid */
+* {
+    cursor: crosshair;
+}
+
+a,
+button,
+[role="button"],
+input,
+textarea,
+select,
+label {
+    cursor: crosshair;
+}
+
+/* Remove default focus visible on mouse, keep for keyboard */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 1.5px dashed var(--smudge);
+    outline-offset: 3px;
+}
+
+/* Selection */
+::selection {
+    background: var(--lav);
+    color: var(--void);
+}
+
+
+/* ─── TYPOGRAPHY UTILITIES ────────────────────────────────────── */
+
+.font-display {
+    font-family: var(--font-display);
+}
+
+.font-title {
+    font-family: var(--font-title);
+}
+
+.font-serif,
+.font-body {
+    font-family: var(--font-body);
+}
+
+.font-mono {
+    font-family: var(--font-mono);
+}
+
+/* Fluid headline sizes */
+.text-hero {
+    font-size: clamp(3.5rem, 9vw, 7.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+}
+
+.text-section {
+    font-size: clamp(2.2rem, 5vw, 4.5rem);
+    line-height: 1.1;
+}
+
+.text-display {
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1.2;
+}
+
+/* Whisper — small italic annotation style */
+.text-whisper {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--smudge);
+    line-height: 1.7;
+}
+
+/* Label — mono uppercase tracking */
+.text-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fog);
+}
+
+/* Chapter marker — Special Elite */
+.text-chapter {
+    font-family: var(--font-title);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    color: var(--void);
+}
+
+
+/* ─── COLOR UTILITY CLASSES ───────────────────────────────────── */
+
+.text-ink {
+    color: var(--ink);
+}
+
+.text-void {
+    color: var(--void);
+}
+
+.text-fog {
+    color: var(--fog);
+}
+
+.text-smudge {
+    color: var(--smudge);
+}
+
+.text-ash {
+    color: var(--ash);
+}
+
+.bg-ink {
+    background-color: var(--ink);
+}
+
+.bg-void {
+    background-color: var(--void);
+}
+
+.bg-bone {
+    background-color: var(--bone);
+}
+
+.bg-paper {
+    background-color: var(--paper);
+}
+
+.bg-ash {
+    background-color: var(--ash);
+}
+
+.border-ink {
+    border-color: var(--ink);
+}
+
+.border-void {
+    border-color: var(--void);
+}
+
+.border-smudge {
+    border-color: var(--smudge);
+}
+
+.border-ash {
+    border-color: var(--ash);
+}
+
+
+/* ─── LAYOUT ──────────────────────────────────────────────────── */
+
+.container-narrow {
+    max-width: var(--container);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .container-narrow {
+        padding-inline: 2.5rem;
+    }
+}
+
+.section-pad {
+    padding-top: var(--section-pad);
+    padding-bottom: var(--section-pad);
+}
+
+
+/* ─── NOTEBOOK PAPER BACKGROUND ──────────────────────────────── */
+
+.notebook-bg {
+    background-color: var(--bone);
+    background-image:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 27px,
+            var(--smudge) 27px,
+            var(--smudge) 28px);
+}
+
+.notebook-bg--faint {
+    background-color: var(--bone);
+    background-image:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 27px,
+            rgba(196, 191, 176, 0.25) 27px,
+            rgba(196, 191, 176, 0.25) 28px);
+}
+
+/* Left margin rule (used on hero, journal pages) */
+.margin-rule::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 72px;
+    width: 1px;
+    background: var(--blush);
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+
+/* ─── CROSSHATCH PLACEHOLDER ─────────────────────────────────── */
+
+.crosshatch {
+    background-color: var(--ash);
+    background-image:
+        repeating-linear-gradient(45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 8px),
+        repeating-linear-gradient(-45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.crosshatch--ruled {
+    background-color: var(--paper);
+    background-image:
+        repeating-linear-gradient(0deg,
+            transparent,
+            transparent 23px,
+            var(--ash) 23px,
+            var(--ash) 24px);
+}
+
+
+/* ─── TAPE STRIP ──────────────────────────────────────────────── */
+
+.tape {
+    display: inline-block;
+    padding: 3px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--void);
+    opacity: 0.78;
+    transform: rotate(-0.5deg);
+}
+
+.tape--lav {
+    background: var(--lav);
+}
+
+.tape--blush {
+    background: var(--blush);
+}
+
+.tape--sage {
+    background: var(--sage);
+}
+
+.tape--sky {
+    background: var(--sky);
+}
+
+
+/* ─── SKETCH CARD ─────────────────────────────────────────────── */
+
+.sketch-card {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--smudge);
+    border-radius: 2px;
+    padding: 1.5rem;
+    transition:
+        transform var(--dur-mid) var(--ease-dream),
+        box-shadow var(--dur-mid) var(--ease-dream);
+}
+
+.sketch-card:hover {
+    transform: rotate(0deg) translateY(-4px) !important;
+    box-shadow: 0 10px 40px rgba(26, 26, 26, 0.09);
+}
+
+/* Tape accent pin (::before) */
+.sketch-card[data-accent]::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 20px;
+    width: 48px;
     height: 8px;
+    background: attr(data-accent);
+    /* fallback — set via inline style in JS */
+    opacity: 0.72;
+    transform: rotate(-1deg);
+}
+
+/* Torn top edge — SVG clip-path illusion */
+.sketch-card--torn {
+    clip-path: polygon(0% 6px, 2% 2px, 4% 5px, 6% 1px, 8% 4px,
+            10% 0px, 12% 3px, 14% 0px, 16% 4px, 18% 1px,
+            20% 5px, 22% 0px, 24% 3px, 26% 0px, 28% 4px,
+            30% 1px, 32% 5px, 34% 2px, 36% 0px, 38% 3px,
+            40% 1px, 42% 5px, 44% 0px, 46% 3px, 48% 1px,
+            50% 4px, 52% 0px, 54% 3px, 56% 1px, 58% 5px,
+            60% 2px, 62% 0px, 64% 4px, 66% 1px, 68% 3px,
+            70% 0px, 72% 4px, 74% 1px, 76% 5px, 78% 2px,
+            80% 0px, 82% 3px, 84% 1px, 86% 4px, 88% 0px,
+            90% 3px, 92% 1px, 94% 4px, 96% 0px, 98% 2px,
+            100% 4px,
+            100% 100%, 0% 100%);
+}
+
+
+/* ─── NAVIGATION ──────────────────────────────────────────────── */
+
+.nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0 1.25rem;
+    height: 100%;
+    border-bottom: 2px solid transparent;
+    transition: border-color var(--dur-mid) ease;
+}
+
+.nav-link--active {
+    border-bottom-color: var(--ink);
+}
+
+/* The slow pencil-draw underline on hover */
+.nav-link:not(.nav-link--active)::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 1.25rem;
+    right: 1.25rem;
+    height: 2px;
+    background: var(--smudge);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-dream);
+}
+
+.nav-link:not(.nav-link--active):hover::after {
+    transform: scaleX(1);
+}
+
+
+/* ─── CONTACT FORM FIELDS ─────────────────────────────────────── */
+
+.contact-field {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--smudge);
+    outline: none;
+    padding: 0.5rem 0 0.6rem;
+    width: 100%;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    transition:
+        border-color var(--dur-slow) var(--ease-dream),
+        font-family var(--dur-mid) ease;
+    resize: none;
+    /* Ink-wash bloom on focus */
+    box-shadow: none;
+}
+
+.contact-field::placeholder {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--smudge);
+    transition: color var(--dur-mid) ease;
+}
+
+.contact-field:focus {
+    border-bottom-color: var(--ink);
+    /* Subtle ink bloom — no box, just depth on the line */
+    box-shadow: 0 1.5px 0 0 rgba(26, 26, 26, 0.18);
+}
+
+.contact-field:focus::placeholder {
+    color: var(--fog);
+}
+
+
+/* ─── TIMELINE ────────────────────────────────────────────────── */
+
+.timeline-rule {
+    position: absolute;
+    left: 88px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    border-left: 1px dashed var(--smudge);
+}
+
+.timeline-node {
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--smudge);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+}
+
+
+/* ─── DASHED RULE / DIVIDER ───────────────────────────────────── */
+
+.dashed-rule {
+    border: none;
+    border-top: 1px dashed var(--smudge);
+    margin: 2.5rem 0;
+    opacity: 0.6;
+}
+
+
+/* ─── SCROLLBAR ───────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: #f5f5f0;
-    border-left: 1px solid #000;
-    background-image: radial-gradient(circle, #00000018 0.6px, transparent 0.6px);
-    background-size: 5px 5px;
+    background: var(--bone);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #000;
-    border: none;
-    background-image: repeating-linear-gradient(to bottom,
-            #000 0px,
-            #000 4px,
-            #222 4px,
-            #222 8px);
+    background: var(--smudge);
+    border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #000;
-    background-image: repeating-linear-gradient(to bottom,
-            #111 0px,
-            #111 4px,
-            #333 4px,
-            #333 8px);
+    background: var(--fog);
 }
 
-::-webkit-scrollbar-thumb:active {
-    background: #000;
+
+/* ─── FRAMER-MOTION PAGE WRAPPER ──────────────────────────────── */
+
+/* Prevent layout shift during exit animations */
+.page-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
 }
 
-::-webkit-scrollbar-corner {
-    background: #f5f5f0;
+
+/* ─── UTILITY — ROTATE VARIANTS ──────────────────────────────── */
+
+/* Used for tape strips and floating cards */
+.rotate-neg-half {
+    transform: rotate(-0.5deg);
+}
+
+.rotate-pos-half {
+    transform: rotate(0.5deg);
+}
+
+.rotate-neg-1 {
+    transform: rotate(-1deg);
+}
+
+.rotate-pos-1 {
+    transform: rotate(1deg);
+}
+
+.rotate-neg-15 {
+    transform: rotate(-1.5deg);
+}
+
+.rotate-pos-15 {
+    transform: rotate(1.5deg);
+}
+
+
+/* ─── RESPONSIVE HELPERS ──────────────────────────────────────── */
+
+@media (max-width: 640px) {
+    .timeline-rule {
+        display: none;
+    }
+
+    .sketch-card {
+        transform: none !important;
+    }
+
+    .sketch-card:hover {
+        transform: translateY(-2px) !important;
+    }
+}
+
+
+/* ─── PRINT ───────────────────────────────────────────────────── */
+
+@media print {
+    body {
+        background: white;
+        color: black;
+        font-family: var(--font-body);
+    }
+
+    .nav-link,
+    footer,
+    .tape {
+        display: none;
+    }
+
+    .sketch-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+
+/* ─── ACCESSIBILITY — REDUCED MOTION ─────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

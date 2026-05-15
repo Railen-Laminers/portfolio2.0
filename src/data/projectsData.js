@@ -1,0 +1,53 @@
+// src/data/projectsData.js
+export const PROJECTS = [
+    {
+        title: "untitled project {01}",
+        year: "2024",
+        tag: "PERSONAL",
+        accent: "#d4c9e8",
+        rotate: 0.6,
+        desc: "A short description of the work — what it was, what it became.",
+    },
+    {
+        title: "white space study",
+        year: "2023 — ongoing",
+        tag: "COLLAB",
+        accent: "#c8d9c4",
+        rotate: -0.8,
+        desc: "Describe the process, the collaboration, the question it tried to answer.",
+    },
+    {
+        title: "a recurring dream",
+        year: "2024",
+        tag: "ONGOING",
+        accent: "#e8cdd4",
+        rotate: 0.4,
+        desc: "What this project feels like more than what it is.",
+    },
+    {
+        title: "something unnamed",
+        year: "2022",
+        tag: "ARCHIVED",
+        accent: "#c4d4e8",
+        rotate: -0.5,
+        desc: "Older work. Still important. The seeds of everything after.",
+    },
+    {
+        title: "the long one",
+        year: "2023",
+        tag: "PERSONAL",
+        accent: "#d4c9e8",
+        rotate: 0.9,
+        desc: "A project that took a long time. That changed shape many times.",
+    },
+    {
+        title: "for someone else",
+        year: "2024",
+        tag: "COLLAB",
+        accent: "#c8d9c4",
+        rotate: -0.3,
+        desc: "Made for another person, another place. Still carries your fingerprints.",
+    },
+];
+
+export const PROJECT_FILTERS = ["ALL", "PERSONAL", "COLLAB", "ONGOING", "ARCHIVED"];
