@@ -29,10 +29,10 @@ function CardContent({ project }) {
             <h3 className="font-serif text-[1.1rem] text-ink mt-3 mb-1 leading-snug">
                 {project.title}
             </h3>
-            <p className="font-mono text-[0.58rem] text-fog tracking-wider mb-3">
+            <p className="font-mono text-[0.58rem] text-void tracking-wider mb-3">
                 {project.year}
             </p>
-            <p className="font-serif italic text-[0.88rem] text-fog leading-relaxed">
+            <p className="font-serif italic text-[0.88rem] text-void leading-relaxed">
                 {project.desc}
             </p>
             <div className="mt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -64,7 +64,7 @@ export default function ProjectsSection() {
                         >
                             things<br />made
                         </h2>
-                        <p className="font-serif text-[1rem] text-fog italic mb-10 max-w-md">
+                        <p className="font-serif text-[1rem] text-void italic mb-10 max-w-md">
                             ...a collection of works. Some finished, some ongoing, some just begun.
                         </p>
                     </motion.div>
@@ -78,7 +78,7 @@ export default function ProjectsSection() {
                                     "font-mono text-[0.6rem] tracking-widest px-4 py-2 border transition-all duration-200 rounded-[1px]",
                                     filter === f
                                         ? "bg-ink text-bone border-ink"
-                                        : "bg-transparent text-fog border-smudge hover:border-fog hover:text-void",
+                                        : "bg-transparent text-void border-smudge hover:border-fog hover:text-void",
                                 ].join(" ")}
                             >
                                 {f}

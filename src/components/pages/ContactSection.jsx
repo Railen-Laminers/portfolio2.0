@@ -91,7 +91,7 @@ export default function ContactSection() {
                                 { label: "EMAIL", value: "railen.laminero@gmail.com" },
                             ].map((item, i) => (
                                 <div key={i} className="border-b border-dashed border-ash pb-4">
-                                    <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-1">{item.label}</p>
+                                    <p className="font-mono text-[0.58rem] text-text-void tracking-widest mb-1">{item.label}</p>
                                     <p className="font-serif italic text-void text-[0.95rem]">{item.value}</p>
                                 </div>
                             ))}
@@ -117,12 +117,12 @@ export default function ContactSection() {
                                     className="text-center py-16"
                                 >
                                     <p className="font-display italic text-ink text-[2.5rem] mb-4">received.</p>
-                                    <p className="font-serif italic text-fog text-[1rem]">
+                                    <p className="font-serif italic text-text-void text-[1rem]">
                                         ...it landed somewhere in the white space. i'll find it.
                                     </p>
                                     <button
                                         onClick={resetForm}
-                                        className="mt-8 font-mono text-[0.6rem] text-fog tracking-widest border-b border-smudge pb-0.5 hover:text-void transition-colors"
+                                        className="mt-8 font-mono text-[0.6rem] text-text-void tracking-widest border-b border-smudge pb-0.5 hover:text-void transition-colors"
                                     >
                                         send another
                                     </button>

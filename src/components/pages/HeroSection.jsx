@@ -20,7 +20,7 @@ export default function HeroSection() {
                 animate="show"
                 className="relative z-10 text-center px-6 max-w-3xl"
             >
-                <motion.p variants={fadeUp} className="font-mono text-[0.62rem] text-fog tracking-[0.2em] mb-6 uppercase">
+                <motion.p variants={fadeUp} className="font-mono text-[0.62rem] text-void tracking-[0.2em] mb-6 uppercase">
                     ○ portfolio 2.0
                 </motion.p>
 
@@ -32,7 +32,7 @@ export default function HeroSection() {
                     something
                 </motion.h1>
 
-                <motion.p variants={fadeUp} className="font-serif italic text-fog text-[1.05rem] mb-12 max-w-sm mx-auto leading-relaxed">
+                <motion.p variants={fadeUp} className="font-serif italic text-void text-[1.05rem] mb-12 max-w-sm mx-auto leading-relaxed">
                     ...a portfolio. a sketchbook. a place that became real by being looked at.
                 </motion.p>
 

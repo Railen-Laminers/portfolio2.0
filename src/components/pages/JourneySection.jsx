@@ -29,7 +29,7 @@ export default function JourneySection() {
                         >
                             how i got<br />here
                         </h2>
-                        <p className="font-serif italic text-[1rem] text-fog max-w-md">
+                        <p className="font-serif italic text-[1rem] text-void max-w-md">
                             ...a record of becoming.
                         </p>
                     </motion.div>
@@ -52,7 +52,7 @@ export default function JourneySection() {
                                 className="grid grid-cols-1 md:grid-cols-[88px_1fr] gap-0 md:gap-12 group"
                             >
                                 <div className="flex md:flex-col items-center md:items-end gap-3 md:gap-1 mb-3 md:mb-0">
-                                    <span className="font-mono text-[0.62rem] text-fog tracking-widest">{entry.year}</span>
+                                    <span className="font-mono text-[0.62rem] text-void tracking-widest">{entry.year}</span>
                                     <div
                                         className="w-3 h-3 border border-smudge rotate-45 md:mr-[-6.5px] shrink-0"
                                         style={{ background: entry.accent, opacity: 0.85 }}
@@ -85,7 +85,7 @@ export default function JourneySection() {
                                         )}
                                     </AnimatePresence>
                                     {expanded !== i && (
-                                        <p className="font-serif italic text-[0.85rem] text-fog">{entry.note || "click to read →"}</p>
+                                        <p className="font-serif italic text-[0.85rem] text-void">{entry.note || "click to read →"}</p>
                                     )}
                                 </div>
                             </motion.div>
@@ -102,7 +102,7 @@ export default function JourneySection() {
                     className="flex justify-end"
                 >
                     <SketchCard rotate={-0.8} accent="#e8cdd4" className="max-w-xs">
-                        <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-2">MARGIN NOTE /</p>
+                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">MARGIN NOTE /</p>
                         <p className="font-display italic text-[0.9rem] text-void leading-relaxed">
                             ...the further i go, the more the beginning makes sense.
                         </p>

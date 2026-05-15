@@ -50,7 +50,7 @@ export default function AboutSection() {
                         </motion.div>
 
                         <motion.div variants={fadeUp} className="border-l-2 border-smudge pl-5">
-                            <p className="font-mono text-[0.6rem] text-fog tracking-widest mb-1">CURRENTLY LOCATED IN</p>
+                            <p className="font-mono text-[0.6rem] text-void tracking-widest mb-1">CURRENTLY LOCATED IN</p>
                             <p className="font-serif italic text-void text-[1rem]">Laguna</p>
                         </motion.div>
                     </div>
@@ -79,7 +79,7 @@ export default function AboutSection() {
                             ...i remember this.
                         </p>
                         <SketchCard rotate={1.2} accent="#c8d9c4" className="mt-2">
-                            <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-2">NOTE TO SELF /</p>
+                            <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">NOTE TO SELF /</p>
                             <p className="font-serif italic text-[0.9rem] text-void leading-relaxed">
                                 Start small. Improve every version.
                             </p>
