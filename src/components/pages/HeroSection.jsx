@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import { NAV } from "../../data/navData";
 
-export default function HeroSection({ onNavigate }) {
+export default function HeroSection() {
+    const navigate = useNavigate();
     return (
         <motion.div
             variants={dreamCut}
@@ -38,7 +40,7 @@ export default function HeroSection({ onNavigate }) {
                     {NAV.map((item) => (
                         <button
                             key={item.id}
-                            onClick={() => onNavigate(item.id)}
+                            onClick={() => navigate(`/${item.id}`)}
                             className="font-mono text-[0.62rem] tracking-[0.12em] text-void border border-smudge px-5 py-2.5 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
                         >
                             {item.glyph} {item.label.toUpperCase()}

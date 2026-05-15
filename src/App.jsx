@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import HeroSection from "./components/pages/HeroSection";
 import AboutSection from "./components/pages/AboutSection";
@@ -6,31 +7,14 @@ import ProjectsSection from "./components/pages/ProjectsSection";
 import JourneySection from "./components/pages/JourneySection";
 import ContactSection from "./components/pages/ContactSection";
 import Navigation from "./components/common/Navigation";
-import { NAV } from "./data/navData";
 
 export default function App() {
-  const [page, setPage] = useState("home");
+  const location = useLocation();
+  const isHome = location.pathname === "/";
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [page]);
-
-  const handleNavigate = (id) => setPage(id);
-
-  const renderPage = () => {
-    switch (page) {
-      case "about":
-        return <AboutSection />;
-      case "projects":
-        return <ProjectsSection />;
-      case "journey":
-        return <JourneySection />;
-      case "contact":
-        return <ContactSection />;
-      default:
-        return <HeroSection onNavigate={handleNavigate} />;
-    }
-  };
+  }, [location.pathname]);
 
   return (
     // GLOBAL BACKGROUND WRAPPER
@@ -48,11 +32,19 @@ export default function App() {
 
       {/* Foreground content */}
       <div className="relative z-10">
-        {page !== "home" && <Navigation active={page} onNavigate={handleNavigate} />}
+        {!isHome && <Navigation />}
 
-        <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
+        <AnimatePresence mode="wait">
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<HeroSection />} />
+            <Route path="/about" element={<AboutSection />} />
+            <Route path="/projects" element={<ProjectsSection />} />
+            <Route path="/journey" element={<JourneySection />} />
+            <Route path="/contact" element={<ContactSection />} />
+          </Routes>
+        </AnimatePresence>
 
-        {page !== "home" && (
+        {!isHome && (
           <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
             <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
               ...

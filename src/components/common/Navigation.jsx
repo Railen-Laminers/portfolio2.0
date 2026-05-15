@@ -1,15 +1,24 @@
 // src/components/common/Navigation.jsx
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { NAV } from "../../data/navData";
 
-export default function Navigation({ active, onNavigate }) {
+export default function Navigation() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const closeMenu = () => setIsMenuOpen(false);
     const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
+    const getActiveId = () => {
+        const path = location.pathname.slice(1);
+        // Return "home" for the root path so active state works correctly
+        return path === "" ? "home" : path;
+    };
+
     const handleLinkClick = (id) => {
-        onNavigate(id);
+        navigate(id === "home" ? "/" : `/${id}`);
         closeMenu();
     };
 
@@ -18,9 +27,9 @@ export default function Navigation({ active, onNavigate }) {
             {/* ===== DESKTOP NAVIGATION (md and up) ===== */}
             <div className="hidden md:block">
                 <nav className="max-w-6xl mx-auto px-6 flex items-stretch h-14">
-                    {/* Logo */}
+                    {/* Logo - now redirects to home */}
                     <button
-                        onClick={() => handleLinkClick("about")}
+                        onClick={() => handleLinkClick("home")}
                         className="font-display italic text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
                     >
                         ◈
@@ -29,7 +38,7 @@ export default function Navigation({ active, onNavigate }) {
                     {/* Links */}
                     <div className="flex items-stretch gap-0">
                         {NAV.map((item) => {
-                            const isActive = active === item.id;
+                            const isActive = getActiveId() === item.id;
                             return (
                                 <button
                                     key={item.id}
@@ -75,7 +84,7 @@ export default function Navigation({ active, onNavigate }) {
                     {/* Spacer + page marker */}
                     <div className="ml-auto flex items-center">
                         <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-                            {String(NAV.findIndex((n) => n.id === active) + 1).padStart(2, "0")} / 04
+                            {String(NAV.findIndex((n) => n.id === getActiveId()) + 1).padStart(2, "0")} / 04
                         </span>
                     </div>
                 </nav>
@@ -85,14 +94,14 @@ export default function Navigation({ active, onNavigate }) {
             <div className="md:hidden">
                 <div className="flex items-center justify-between h-14 px-4 sm:px-6">
                     <button
-                        onClick={() => handleLinkClick("about")}
+                        onClick={() => handleLinkClick("home")}
                         className="font-display italic text-[1.05rem] text-ink flex items-center transition-opacity hover:opacity-60"
                     >
-                        ◈ Railen
+                        ◈
                     </button>
                     <div className="flex items-center gap-3">
                         <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-                            {String(NAV.findIndex((n) => n.id === active) + 1).padStart(2, "0")} / 04
+                            {String(NAV.findIndex((n) => n.id === getActiveId()) + 1).padStart(2, "0")} / 04
                         </span>
                         <button
                             onClick={toggleMenu}
@@ -112,7 +121,7 @@ export default function Navigation({ active, onNavigate }) {
                     <div className="absolute top-14 left-0 right-0 bg-bone/95 backdrop-blur-sm border-b border-ash shadow-lg z-40 animate-in slide-in-from-top-2 duration-200">
                         <div className="flex flex-col py-2">
                             {NAV.map((item) => {
-                                const isActive = active === item.id;
+                                const isActive = getActiveId() === item.id;
                                 return (
                                     <button
                                         key={item.id}
