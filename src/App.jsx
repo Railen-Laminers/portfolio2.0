@@ -55,8 +55,8 @@ export default function App() {
         {page !== "home" && (
           <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
             <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-              ...assets and illustrations to be added.
-            </span>
+              ...
+            </span>  {/* assets and illustrations to be added. */}
           </footer>
         )}
       </div>

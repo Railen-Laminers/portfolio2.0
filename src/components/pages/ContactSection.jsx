@@ -88,8 +88,7 @@ export default function ContactSection() {
 
                         <motion.div variants={fadeUp} className="space-y-5">
                             {[
-                                { label: "EMAIL", value: "your@email.com" },
-                                { label: "Location", value: "@yourhandle" },
+                                { label: "EMAIL", value: "railen.laminero@gmail.com" },
                             ].map((item, i) => (
                                 <div key={i} className="border-b border-dashed border-ash pb-4">
                                     <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-1">{item.label}</p>

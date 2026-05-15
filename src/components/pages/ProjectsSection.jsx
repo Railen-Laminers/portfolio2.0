@@ -1,3 +1,4 @@
+// src/components/ProjectsSection.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
@@ -6,6 +7,40 @@ import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
 import Crosshatch from "../common/Crosshatch";
 import SketchCard from "../common/SketchCard";
+
+// Helper component with image support
+function CardContent({ project }) {
+    const [imgError, setImgError] = useState(false);
+
+    return (
+        <>
+            {!imgError && project.image ? (
+                <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full aspect-[4/3] object-cover mb-5 rounded-[2px] border border-smudge"
+                    onError={() => setImgError(true)}
+                    loading="lazy"
+                />
+            ) : (
+                <Crosshatch className="w-full aspect-[4/3] mb-5" label="[ image missing ]" />
+            )}
+            <TapeStrip color={project.accent}>{project.tag}</TapeStrip>
+            <h3 className="font-serif text-[1.1rem] text-ink mt-3 mb-1 leading-snug">
+                {project.title}
+            </h3>
+            <p className="font-mono text-[0.58rem] text-fog tracking-wider mb-3">
+                {project.year}
+            </p>
+            <p className="font-serif italic text-[0.88rem] text-fog leading-relaxed">
+                {project.desc}
+            </p>
+            <div className="mt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="font-mono text-[0.58rem] text-smudge tracking-widest">view →</span>
+            </div>
+        </>
+    );
+}
 
 export default function ProjectsSection() {
     const [filter, setFilter] = useState("ALL");
@@ -17,7 +52,6 @@ export default function ProjectsSection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            // Removed bg-bone
             className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
@@ -63,22 +97,27 @@ export default function ProjectsSection() {
                                 animate={{ opacity: 1, y: 0, transition: { delay: i * 0.07, duration: 0.5 } }}
                                 exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.25 } }}
                             >
-                                <SketchCard rotate={project.rotate} accent={project.accent}>
-                                    <Crosshatch className="w-full aspect-[4/3] mb-5" label="[ image ]" />
-                                    <TapeStrip color={project.accent}>{project.tag}</TapeStrip>
-                                    <h3 className="font-serif text-[1.1rem] text-ink mt-3 mb-1 leading-snug">
-                                        {project.title}
-                                    </h3>
-                                    <p className="font-mono text-[0.58rem] text-fog tracking-wider mb-3">
-                                        {project.year}
-                                    </p>
-                                    <p className="font-serif italic text-[0.88rem] text-fog leading-relaxed">
-                                        {project.desc}
-                                    </p>
-                                    <div className="mt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <span className="font-mono text-[0.58rem] text-smudge tracking-widest">view →</span>
-                                    </div>
-                                </SketchCard>
+                                {project.link?.startsWith("http") ? (
+                                    <a
+                                        href={project.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="block no-underline focus:outline-none focus:ring-2 focus:ring-fog"
+                                    >
+                                        <SketchCard rotate={project.rotate} accent={project.accent}>
+                                            <CardContent project={project} />
+                                        </SketchCard>
+                                    </a>
+                                ) : (
+                                    <a
+                                        href={project.link || "#"}
+                                        className="block no-underline focus:outline-none focus:ring-2 focus:ring-fog"
+                                    >
+                                        <SketchCard rotate={project.rotate} accent={project.accent}>
+                                            <CardContent project={project} />
+                                        </SketchCard>
+                                    </a>
+                                )}
                             </motion.div>
                         ))}
                     </AnimatePresence>

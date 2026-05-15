@@ -23,7 +23,7 @@ export default function Navigation({ active, onNavigate }) {
                         onClick={() => handleLinkClick("about")}
                         className="font-display italic text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
                     >
-                        ◈ Railen
+                        ◈
                     </button>
 
                     {/* Links */}
@@ -40,13 +40,13 @@ export default function Navigation({ active, onNavigate }) {
                                         isActive ? "border-ink" : "border-transparent",
                                     ].join(" ")}
                                 >
-                                    {/* Glyph - same style for both, but slightly brighter when active */}
+                                    {/* Glyph - black when inactive, ink color when active, no opacity on active */}
                                     <span
                                         className="transition-all duration-300"
                                         style={{
                                             fontFamily: "'IM Fell English', Georgia, serif",
-                                            fontSize: "0.75rem", // same size always
-                                            color: item.accent,
+                                            fontSize: "0.75rem",
+                                            color: isActive ? "#1a1a1a" : "#000000",
                                             opacity: isActive ? 1 : 0.65,
                                         }}
                                     >
@@ -123,7 +123,7 @@ export default function Navigation({ active, onNavigate }) {
                                             className="text-base"
                                             style={{
                                                 fontFamily: "'IM Fell English', Georgia, serif",
-                                                color: item.accent,
+                                                color: isActive ? "#1a1a1a" : "#000000",
                                                 opacity: isActive ? 1 : 0.65,
                                             }}
                                         >

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
@@ -5,19 +6,20 @@ import TapeStrip from "../common/TapeStrip";
 import Crosshatch from "../common/Crosshatch";
 import SketchCard from "../common/SketchCard";
 import DashedRule from "../common/DashedRule";
+import profileImg from "../../assets/about/profile.jpg";
 
 export default function AboutSection() {
+    const [imgError, setImgError] = useState(false);
+
     return (
         <motion.div
             variants={dreamCut}
             initial="initial"
             animate="animate"
             exit="exit"
-            // Removed bg-bone – global background now provides it
             className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
-                {/* rest of the component unchanged */}
                 <motion.div
                     variants={stagger}
                     initial="hidden"
@@ -37,11 +39,7 @@ export default function AboutSection() {
                         </motion.div>
 
                         <motion.p variants={fadeUp} className="font-serif text-[1.05rem] text-void leading-[1.85] mb-6">
-                            Write your story here. This paragraph carries the emotional weight of the section — your voice, your work, what you carry with you. Let it breathe. Let it be honest.
-                        </motion.p>
-
-                        <motion.p variants={fadeUp} className="font-display italic text-[0.95rem] text-fog leading-[1.8] mb-10">
-                            ...a second thought, quieter than the first. Maybe a detail about where you come from, or what you make, or what you're still figuring out.
+                            I approach every project with consistency, attention to detail, and a commitment to continuous improvement — showing up, refining the work, and solving problems as they arise. Building has taught me that meaningful results come not from flashiness, but from reliability, discipline, and the willingness to improve day after day.
                         </motion.p>
 
                         <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10">
@@ -58,9 +56,22 @@ export default function AboutSection() {
                     </div>
 
                     {/* right column */}
-                    <motion.div variants={fadeUp} className="flex flex-col gap-5">
-                        <div className="relative">
-                            <Crosshatch className="w-full aspect-[3/4] border border-smudge" label="[ portrait / illustration ]" />
+                    <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center md:items-stretch">
+                        <div className="relative max-w-[260px] mx-auto md:max-w-none w-full md:w-auto">
+                            {!imgError ? (
+                                <img
+                                    src={profileImg}
+                                    alt="Portrait of Railen"
+                                    className="w-full aspect-[3/4] object-cover border border-smudge grayscale"
+                                    onError={() => setImgError(true)}
+                                    loading="lazy"
+                                />
+                            ) : (
+                                <Crosshatch 
+                                    className="w-full aspect-[3/4] border border-smudge" 
+                                    label="[ portrait unavailable ]" 
+                                />
+                            )}
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
@@ -70,7 +81,7 @@ export default function AboutSection() {
                         <SketchCard rotate={1.2} accent="#c8d9c4" className="mt-2">
                             <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-2">NOTE TO SELF /</p>
                             <p className="font-serif italic text-[0.9rem] text-void leading-relaxed">
-                                Add a small personal note, quote, or detail here — something that feels like a margin annotation.
+                                Start small. Improve every version.
                             </p>
                         </SketchCard>
                     </motion.div>

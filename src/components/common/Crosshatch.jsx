@@ -1,4 +1,3 @@
-// src/components/common/Crosshatch.jsx
 export default function Crosshatch({ className = "", label = "[ asset ]" }) {
     return (
         <div
