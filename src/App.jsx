@@ -1,12 +1,13 @@
 import Layout from './components/Layout';
 import Hero from './components/Hero';
-import Projects from './components/Projects';
+import Nav from './components/Nav';
 
 export default function App() {
   return (
     <Layout>
       <Hero />
-      <Projects />
+      <Nav />
+
     </Layout>
   );
 }
