@@ -1,70 +1,155 @@
 // src/components/common/Navigation.jsx
+import { useState } from "react";
 import { NAV } from "../../data/navData";
 
 export default function Navigation({ active, onNavigate }) {
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    const closeMenu = () => setIsMenuOpen(false);
+    const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
+    const handleLinkClick = (id) => {
+        onNavigate(id);
+        closeMenu();
+    };
+
     return (
         <header className="fixed top-0 left-0 right-0 z-50 bg-bone/90 backdrop-blur-sm border-b border-ash">
-            <nav className="max-w-6xl mx-auto px-6 flex items-stretch h-14">
-                {/* Logo */}
-                <button
-                    onClick={() => onNavigate("about")}
-                    className="font-display italic text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
-                >
-                    ◈ Railen
-                </button>
+            {/* ===== DESKTOP NAVIGATION (md and up) ===== */}
+            <div className="hidden md:block">
+                <nav className="max-w-6xl mx-auto px-6 flex items-stretch h-14">
+                    {/* Logo */}
+                    <button
+                        onClick={() => handleLinkClick("about")}
+                        className="font-display italic text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
+                    >
+                        ◈ Railen
+                    </button>
 
-                {/* Links */}
-                <div className="flex items-stretch gap-0">
-                    {NAV.map((item) => {
-                        const isActive = active === item.id;
-                        return (
-                            <button
-                                key={item.id}
-                                onClick={() => onNavigate(item.id)}
-                                className={[
-                                    "relative flex items-center gap-2 px-5 h-full transition-all duration-300",
-                                    "border-b-2",
-                                    isActive ? "border-ink" : "border-transparent",
-                                ].join(" ")}
-                            >
-                                <span
-                                    className="transition-all duration-300"
-                                    style={{
-                                        fontFamily: "'IM Fell English', Georgia, serif",
-                                        fontSize: isActive ? "0.85rem" : "0.75rem",
-                                        color: item.accent,
-                                        opacity: isActive ? 1 : 0.65,
-                                    }}
+                    {/* Links */}
+                    <div className="flex items-stretch gap-0">
+                        {NAV.map((item) => {
+                            const isActive = active === item.id;
+                            return (
+                                <button
+                                    key={item.id}
+                                    onClick={() => handleLinkClick(item.id)}
+                                    className={[
+                                        "relative flex items-center gap-2 px-5 h-full transition-all duration-300",
+                                        "border-b-2",
+                                        isActive ? "border-ink" : "border-transparent",
+                                    ].join(" ")}
                                 >
-                                    {item.glyph}
-                                </span>
-                                <span
-                                    className="transition-all duration-300"
-                                    style={{
-                                        fontFamily: isActive
-                                            ? "'IM Fell English', Georgia, serif"
-                                            : "'Space Mono', monospace",
-                                        fontStyle: isActive ? "italic" : "normal",
-                                        fontSize: isActive ? "0.95rem" : "0.62rem",
-                                        letterSpacing: isActive ? "0" : "0.1em",
-                                        color: isActive ? "#1a1a1a" : "#9a9690",
-                                        textTransform: isActive ? "none" : "uppercase",
-                                    }}
-                                >
-                                    {item.label}
-                                </span>
-                            </button>
-                        );
-                    })}
+                                    {/* Glyph - same style for both, but slightly brighter when active */}
+                                    <span
+                                        className="transition-all duration-300"
+                                        style={{
+                                            fontFamily: "'IM Fell English', Georgia, serif",
+                                            fontSize: "0.75rem", // same size always
+                                            color: item.accent,
+                                            opacity: isActive ? 1 : 0.65,
+                                        }}
+                                    >
+                                        {item.glyph}
+                                    </span>
+                                    {/* Label - consistent monospace uppercase, active = darker + border */}
+                                    <span
+                                        className="transition-all duration-300"
+                                        style={{
+                                            fontFamily: "'Space Mono', monospace",
+                                            fontStyle: "normal",
+                                            fontSize: "0.62rem",
+                                            letterSpacing: "0.1em",
+                                            color: isActive ? "#1a1a1a" : "#9a9690",
+                                            textTransform: "uppercase",
+                                            fontWeight: isActive ? "500" : "400",
+                                        }}
+                                    >
+                                        {item.label}
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Spacer + page marker */}
+                    <div className="ml-auto flex items-center">
+                        <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
+                            {String(NAV.findIndex((n) => n.id === active) + 1).padStart(2, "0")} / 04
+                        </span>
+                    </div>
+                </nav>
+            </div>
+
+            {/* ===== MOBILE NAVIGATION (below md) ===== */}
+            <div className="md:hidden">
+                <div className="flex items-center justify-between h-14 px-4 sm:px-6">
+                    <button
+                        onClick={() => handleLinkClick("about")}
+                        className="font-display italic text-[1.05rem] text-ink flex items-center transition-opacity hover:opacity-60"
+                    >
+                        ◈ Railen
+                    </button>
+                    <div className="flex items-center gap-3">
+                        <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
+                            {String(NAV.findIndex((n) => n.id === active) + 1).padStart(2, "0")} / 04
+                        </span>
+                        <button
+                            onClick={toggleMenu}
+                            className="flex flex-col items-center justify-center w-8 h-8 rounded-md transition-colors hover:bg-ash/10 focus:outline-none"
+                            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+                        >
+                            <div className="relative w-5 h-5">
+                                <span className={`absolute h-0.5 w-5 bg-ink rounded-full transition-all duration-300 ${isMenuOpen ? "rotate-45 top-2" : "top-0"}`} />
+                                <span className={`absolute h-0.5 w-5 bg-ink rounded-full transition-all duration-300 top-2 ${isMenuOpen ? "opacity-0" : "opacity-100"}`} />
+                                <span className={`absolute h-0.5 w-5 bg-ink rounded-full transition-all duration-300 ${isMenuOpen ? "-rotate-45 top-2" : "top-4"}`} />
+                            </div>
+                        </button>
+                    </div>
                 </div>
 
-                {/* Spacer + page marker */}
-                <div className="ml-auto flex items-center">
-                    <span className="font-mono text-[0.55rem] text-smudge tracking-widest hidden md:block">
-                        {String(NAV.findIndex((n) => n.id === active) + 1).padStart(2, "0")} / 04
-                    </span>
-                </div>
-            </nav>
+                {isMenuOpen && (
+                    <div className="absolute top-14 left-0 right-0 bg-bone/95 backdrop-blur-sm border-b border-ash shadow-lg z-40 animate-in slide-in-from-top-2 duration-200">
+                        <div className="flex flex-col py-2">
+                            {NAV.map((item) => {
+                                const isActive = active === item.id;
+                                return (
+                                    <button
+                                        key={item.id}
+                                        onClick={() => handleLinkClick(item.id)}
+                                        className={`flex items-center gap-4 px-6 py-3 w-full text-left transition-colors ${isActive ? "bg-ash/10" : "hover:bg-ash/5"}`}
+                                    >
+                                        <span
+                                            className="text-base"
+                                            style={{
+                                                fontFamily: "'IM Fell English', Georgia, serif",
+                                                color: item.accent,
+                                                opacity: isActive ? 1 : 0.65,
+                                            }}
+                                        >
+                                            {item.glyph}
+                                        </span>
+                                        <span
+                                            className="text-sm"
+                                            style={{
+                                                fontFamily: "'Space Mono', monospace",
+                                                fontStyle: "normal",
+                                                letterSpacing: "0.05em",
+                                                color: isActive ? "#1a1a1a" : "#9a9690",
+                                                textTransform: "uppercase",
+                                                fontWeight: isActive ? "500" : "400",
+                                            }}
+                                        >
+                                            {item.label}
+                                        </span>
+                                        {isActive && <span className="ml-auto text-xs text-ink/50">●</span>}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+            </div>
         </header>
     );
 }

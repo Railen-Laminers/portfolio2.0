@@ -1,4 +1,3 @@
-// src/App.jsx
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import HeroSection from "./components/pages/HeroSection";
@@ -34,18 +33,33 @@ export default function App() {
   };
 
   return (
-    <div className="font-mono bg-bone min-h-screen">
-      {page !== "home" && <Navigation active={page} onNavigate={handleNavigate} />}
+    // GLOBAL BACKGROUND WRAPPER
+    <div className="relative min-h-screen bg-bone overflow-hidden">
+      {/* Global notebook grid lines */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-30"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 27px, #c4bfb0 27px, #c4bfb0 28px)",
+        }}
+      />
+      {/* Global left margin rule */}
+      <div className="absolute top-0 bottom-0 left-[72px] w-px bg-[#e8cdd4] opacity-60 hidden md:block" />
 
-      <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
+      {/* Foreground content */}
+      <div className="relative z-10">
+        {page !== "home" && <Navigation active={page} onNavigate={handleNavigate} />}
 
-      {page !== "home" && (
-        <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
-          <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-            ...assets and illustrations to be added.
-          </span>
-        </footer>
-      )}
+        <AnimatePresence mode="wait">{renderPage()}</AnimatePresence>
+
+        {page !== "home" && (
+          <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
+            <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
+              ...assets and illustrations to be added.
+            </span>
+          </footer>
+        )}
+      </div>
     </div>
   );
 }

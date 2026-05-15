@@ -1,4 +1,3 @@
-// src/components/pages/ProjectsSection.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
@@ -18,7 +17,8 @@ export default function ProjectsSection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen pt-14 bg-bone"
+            // Removed bg-bone
+            className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
                 <motion.div variants={stagger} initial="hidden" animate="show">
@@ -35,7 +35,6 @@ export default function ProjectsSection() {
                         </p>
                     </motion.div>
 
-                    {/* Filter tabs — notebook style */}
                     <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-12">
                         {PROJECT_FILTERS.map((f) => (
                             <button
@@ -54,7 +53,6 @@ export default function ProjectsSection() {
                     </motion.div>
                 </motion.div>
 
-                {/* Grid */}
                 <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     <AnimatePresence mode="popLayout">
                         {filtered.map((project, i) => (
@@ -66,11 +64,8 @@ export default function ProjectsSection() {
                                 exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.25 } }}
                             >
                                 <SketchCard rotate={project.rotate} accent={project.accent}>
-                                    {/* Image zone */}
                                     <Crosshatch className="w-full aspect-[4/3] mb-5" label="[ image ]" />
-
                                     <TapeStrip color={project.accent}>{project.tag}</TapeStrip>
-
                                     <h3 className="font-serif text-[1.1rem] text-ink mt-3 mb-1 leading-snug">
                                         {project.title}
                                     </h3>
@@ -80,8 +75,6 @@ export default function ProjectsSection() {
                                     <p className="font-serif italic text-[0.88rem] text-fog leading-relaxed">
                                         {project.desc}
                                     </p>
-
-                                    {/* Hover affordance */}
                                     <div className="mt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <span className="font-mono text-[0.58rem] text-smudge tracking-widest">view →</span>
                                     </div>

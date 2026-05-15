@@ -1,4 +1,3 @@
-// src/components/pages/JourneySection.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
@@ -17,7 +16,8 @@ export default function JourneySection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen pt-14 bg-bone"
+            // Removed bg-bone
+            className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
                 <motion.div variants={stagger} initial="hidden" animate="show">
@@ -35,9 +35,7 @@ export default function JourneySection() {
                     </motion.div>
                 </motion.div>
 
-                {/* Timeline */}
                 <div className="relative">
-                    {/* Vertical rule */}
                     <div className="absolute left-[88px] top-0 bottom-0 w-px border-l border-dashed border-smudge hidden md:block" />
 
                     <motion.div
@@ -53,28 +51,22 @@ export default function JourneySection() {
                                 variants={fadeUp}
                                 className="grid grid-cols-1 md:grid-cols-[88px_1fr] gap-0 md:gap-12 group"
                             >
-                                {/* Year column */}
                                 <div className="flex md:flex-col items-center md:items-end gap-3 md:gap-1 mb-3 md:mb-0">
                                     <span className="font-mono text-[0.62rem] text-fog tracking-widest">{entry.year}</span>
-                                    {/* Diamond node */}
                                     <div
                                         className="w-3 h-3 border border-smudge rotate-45 md:mr-[-6.5px] shrink-0"
                                         style={{ background: entry.accent, opacity: 0.85 }}
                                     />
                                 </div>
-
-                                {/* Content */}
                                 <div className="pl-0 md:pl-2">
                                     <div className="mb-2">
                                         <TapeStrip color={entry.accent}>{entry.tag}</TapeStrip>
                                     </div>
-
                                     <button onClick={() => setExpanded(expanded === i ? null : i)} className="text-left w-full">
                                         <h3 className="font-display italic text-ink text-[1.4rem] leading-snug mb-1 hover:opacity-70 transition-opacity">
                                             {entry.title}
                                         </h3>
                                     </button>
-
                                     <AnimatePresence>
                                         {expanded === i && (
                                             <motion.div
@@ -92,8 +84,6 @@ export default function JourneySection() {
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-
-                                    {/* Collapsed preview */}
                                     {expanded !== i && (
                                         <p className="font-serif italic text-[0.85rem] text-fog">{entry.note || "click to read →"}</p>
                                     )}
@@ -105,7 +95,6 @@ export default function JourneySection() {
 
                 <DashedRule />
 
-                {/* Margin annotation block */}
                 <motion.div
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1, transition: { duration: 1 } }}

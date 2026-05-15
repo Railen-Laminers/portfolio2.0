@@ -1,4 +1,3 @@
-// src/components/pages/HeroSection.jsx
 import { motion } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import { NAV } from "../../data/navData";
@@ -10,19 +9,9 @@ export default function HeroSection({ onNavigate }) {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen bg-bone flex flex-col items-center justify-center relative overflow-hidden"
+            // bg-bone removed – global background provides it
+            className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
         >
-            {/* Background grid lines — notebook paper feel */}
-            <div
-                className="absolute inset-0 pointer-events-none opacity-30"
-                style={{
-                    backgroundImage:
-                        "repeating-linear-gradient(0deg, transparent, transparent 27px, #c4bfb0 27px, #c4bfb0 28px)",
-                }}
-            />
-            {/* Left margin rule */}
-            <div className="absolute top-0 bottom-0 left-[72px] w-px bg-[#e8cdd4] opacity-60 hidden md:block" />
-
             <motion.div
                 variants={stagger}
                 initial="hidden"

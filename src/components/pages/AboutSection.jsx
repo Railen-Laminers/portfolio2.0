@@ -1,4 +1,3 @@
-// src/components/pages/AboutSection.jsx
 import { motion } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
@@ -14,16 +13,18 @@ export default function AboutSection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen pt-14 bg-bone"
+            // Removed bg-bone – global background now provides it
+            className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
+                {/* rest of the component unchanged */}
                 <motion.div
                     variants={stagger}
                     initial="hidden"
                     animate="show"
                     className="grid grid-cols-1 md:grid-cols-[1fr_380px] gap-16 items-start"
                 >
-                    {/* Left — text */}
+                    {/* left column */}
                     <div>
                         <motion.div variants={fadeUp}>
                             <SectionLabel>○ about</SectionLabel>
@@ -31,12 +32,11 @@ export default function AboutSection() {
                                 className="font-display italic text-ink leading-[1.1] mb-8"
                                 style={{ fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
                             >
-                               Railen
+                                railen
                             </h1>
                         </motion.div>
 
                         <motion.p variants={fadeUp} className="font-serif text-[1.05rem] text-void leading-[1.85] mb-6">
-                            {/* ↓ Replace with your actual bio */}
                             Write your story here. This paragraph carries the emotional weight of the section — your voice, your work, what you carry with you. Let it breathe. Let it be honest.
                         </motion.p>
 
@@ -57,22 +57,16 @@ export default function AboutSection() {
                         </motion.div>
                     </div>
 
-                    {/* Right — portrait zone + floaters */}
+                    {/* right column */}
                     <motion.div variants={fadeUp} className="flex flex-col gap-5">
-                        {/* Portrait placeholder */}
                         <div className="relative">
                             <Crosshatch className="w-full aspect-[3/4] border border-smudge" label="[ portrait / illustration ]" />
-                            {/* Tape accent */}
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
-
-                        {/* Small caption */}
                         <p className="font-display italic text-[0.82rem] text-smudge text-right">
                             ...i remember this.
                         </p>
-
-                        {/* Floating note card */}
                         <SketchCard rotate={1.2} accent="#c8d9c4" className="mt-2">
                             <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-2">NOTE TO SELF /</p>
                             <p className="font-serif italic text-[0.9rem] text-void leading-relaxed">
@@ -84,7 +78,6 @@ export default function AboutSection() {
 
                 <DashedRule />
 
-                {/* Skills / tools row */}
                 <motion.div
                     variants={stagger}
                     initial="hidden"
@@ -95,7 +88,7 @@ export default function AboutSection() {
                     {[
                         { label: "TOOLS", items: ["VS Code", "..."] },
                         { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "..."] },
-                        { label: "INTERESTS", items: ["Gaming", "Drawing", "Coding", "Reading","..."] },
+                        { label: "INTERESTS", items: ["Gaming", "Drawing", "Coding", "Reading", "..."] },
                         { label: "CURRENTLY", items: ["learning —", "making —", "..."] },
                     ].map((col, i) => (
                         <motion.div key={i} variants={fadeUp}>

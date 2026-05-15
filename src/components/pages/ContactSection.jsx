@@ -1,4 +1,3 @@
-// src/components/pages/ContactSection.jsx
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
@@ -38,7 +37,6 @@ export default function ContactSection() {
             return;
         }
 
-        // basic email validation
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(values.email.trim())) {
             setFormError("please enter a valid email address.");
@@ -46,7 +44,6 @@ export default function ContactSection() {
         }
 
         setSent(true);
-        // clear sensitive fields after "send"
         setValues({ name: "", email: "", message: "" });
         setPrivacyAgreed(false);
         setFormError("");
@@ -68,11 +65,12 @@ export default function ContactSection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen pt-14 bg-bone"
+            // Removed bg-bone
+            className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
-                    {/* Left — heading + context */}
+                    {/* left column */}
                     <motion.div variants={stagger} initial="hidden" animate="show">
                         <motion.div variants={fadeUp}>
                             <SectionLabel>× contact</SectionLabel>
@@ -100,7 +98,6 @@ export default function ContactSection() {
                             ))}
                         </motion.div>
 
-                        {/* Floating card */}
                         <motion.div variants={fadeUp} className="mt-10">
                             <SketchCard rotate={1.1} accent="#c4d4e8">
                                 <p className="font-display italic text-[0.88rem] text-void leading-relaxed">
@@ -110,7 +107,7 @@ export default function ContactSection() {
                         </motion.div>
                     </motion.div>
 
-                    {/* Right — form */}
+                    {/* right column – form */}
                     <motion.div variants={stagger} initial="hidden" animate="show" className="md:pt-16">
                         <AnimatePresence mode="wait">
                             {sent ? (
@@ -169,7 +166,6 @@ export default function ContactSection() {
                                         </motion.div>
                                     ))}
 
-                                    {/* DATA PRIVACY AGREEMENT */}
                                     <motion.div variants={fadeUp} className="mb-8">
                                         <label className="flex items-start gap-3 cursor-pointer group">
                                             <input
@@ -185,7 +181,6 @@ export default function ContactSection() {
                                         </label>
                                     </motion.div>
 
-                                    {/* FORM ERROR MESSAGE */}
                                     {formError && (
                                         <motion.div
                                             initial={{ opacity: 0, y: -4 }}
@@ -201,25 +196,7 @@ export default function ContactSection() {
                                     <motion.div variants={fadeUp}>
                                         <button
                                             onClick={handleSubmit}
-                                            className="
-        font-display italic
-        text-paper
-        bg-ink
-        border border-ink
-        rounded-none
-
-        px-6 py-1
-        min-w-[140px]
-
-        text-[1.05rem]
-        flex items-center justify-center gap-2
-
-        transition-all duration-300 ease-dream
-
-        hover:bg-paper
-        hover:text-ink
-        hover:border-ink
-    "
+                                            className="font-display italic text-paper bg-ink border border-ink rounded-none px-6 py-1 min-w-[140px] text-[1.05rem] flex items-center justify-center gap-2 transition-all duration-300 ease-dream hover:bg-paper hover:text-ink hover:border-ink"
                                         >
                                             Submit
                                         </button>
