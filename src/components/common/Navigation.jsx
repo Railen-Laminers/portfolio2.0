@@ -10,7 +10,7 @@ export default function Navigation({ active, onNavigate }) {
                     onClick={() => onNavigate("about")}
                     className="font-display italic text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
                 >
-                    ◈ you
+                    ◈ Railen
                 </button>
 
                 {/* Links */}

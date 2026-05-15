@@ -26,14 +26,12 @@ export default function AboutSection() {
                     {/* Left — text */}
                     <div>
                         <motion.div variants={fadeUp}>
-                            <SectionLabel>○ entry / about</SectionLabel>
+                            <SectionLabel>○ about</SectionLabel>
                             <h1
                                 className="font-display italic text-ink leading-[1.1] mb-8"
                                 style={{ fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
                             >
-                                who<br />
-                                i am<br />
-                                becoming
+                               Railen
                             </h1>
                         </motion.div>
 
@@ -47,7 +45,7 @@ export default function AboutSection() {
                         </motion.p>
 
                         <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10">
-                            {["DESIGNER", "DEVELOPER", "SOMETHING ELSE"].map((tag, i) => {
+                            {["DEVELOPER", "SOMETHING ELSE"].map((tag, i) => {
                                 const colors = ["#d4c9e8", "#c8d9c4", "#e8cdd4"];
                                 return <TapeStrip key={i} color={colors[i]}>{tag}</TapeStrip>;
                             })}
@@ -55,7 +53,7 @@ export default function AboutSection() {
 
                         <motion.div variants={fadeUp} className="border-l-2 border-smudge pl-5">
                             <p className="font-mono text-[0.6rem] text-fog tracking-widest mb-1">CURRENTLY LOCATED IN</p>
-                            <p className="font-serif italic text-void text-[1rem]">somewhere between here and the white space</p>
+                            <p className="font-serif italic text-void text-[1rem]">Laguna</p>
                         </motion.div>
                     </div>
 
@@ -95,10 +93,10 @@ export default function AboutSection() {
                     className="grid grid-cols-2 md:grid-cols-4 gap-6"
                 >
                     {[
-                        { label: "TOOLS", items: ["Figma", "VS Code", "Procreate", "..."] },
-                        { label: "LANGUAGES", items: ["JavaScript", "TypeScript", "Python", "..."] },
-                        { label: "INTERESTS", items: ["game design", "writing", "illustration", "..."] },
-                        { label: "CURRENTLY", items: ["learning —", "making —", "reading —", "..."] },
+                        { label: "TOOLS", items: ["VS Code", "..."] },
+                        { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "..."] },
+                        { label: "INTERESTS", items: ["Gaming", "Drawing", "Coding", "Reading","..."] },
+                        { label: "CURRENTLY", items: ["learning —", "making —", "..."] },
                     ].map((col, i) => (
                         <motion.div key={i} variants={fadeUp}>
                             <SectionLabel>{col.label}</SectionLabel>

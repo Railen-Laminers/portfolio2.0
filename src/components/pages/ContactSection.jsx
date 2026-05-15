@@ -8,16 +8,58 @@ import SketchCard from "../common/SketchCard";
 export default function ContactSection() {
     const [focused, setFocused] = useState(null);
     const [sent, setSent] = useState(false);
-    const [values, setValues] = useState({ name: "", contact: "", message: "" });
+    const [values, setValues] = useState({ name: "", email: "", message: "" });
+    const [privacyAgreed, setPrivacyAgreed] = useState(false);
+    const [formError, setFormError] = useState("");
 
     const fields = [
-        { key: "name", placeholder: "your name", type: "text", rows: null },
-        { key: "contact", placeholder: "where to find you", type: "text", rows: null },
-        { key: "message", placeholder: "what you want to say", type: "textarea", rows: 4 },
+        { key: "name", placeholder: "your name (First and Last name)", type: "text", rows: null },
+        { key: "email", placeholder: "your email (Gmail)", type: "email", rows: null },
+        { key: "message", placeholder: "your message / feedback", type: "textarea", rows: 4 },
     ];
 
+    const resetForm = () => {
+        setValues({ name: "", email: "", message: "" });
+        setPrivacyAgreed(false);
+        setFormError("");
+        setSent(false);
+    };
+
     const handleSubmit = () => {
-        if (values.name && values.message) setSent(true);
+        setFormError("");
+
+        if (!values.name.trim() || !values.email.trim() || !values.message.trim()) {
+            setFormError("name, email, and message are all required.");
+            return;
+        }
+
+        if (!privacyAgreed) {
+            setFormError("you must agree to the data privacy terms to continue.");
+            return;
+        }
+
+        // basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(values.email.trim())) {
+            setFormError("please enter a valid email address.");
+            return;
+        }
+
+        setSent(true);
+        // clear sensitive fields after "send"
+        setValues({ name: "", email: "", message: "" });
+        setPrivacyAgreed(false);
+        setFormError("");
+    };
+
+    const handleFieldChange = (key, value) => {
+        setValues({ ...values, [key]: value });
+        if (formError) setFormError("");
+    };
+
+    const handlePrivacyChange = (checked) => {
+        setPrivacyAgreed(checked);
+        if (formError) setFormError("");
     };
 
     return (
@@ -33,7 +75,7 @@ export default function ContactSection() {
                     {/* Left — heading + context */}
                     <motion.div variants={stagger} initial="hidden" animate="show">
                         <motion.div variants={fadeUp}>
-                            <SectionLabel>× reach / contact</SectionLabel>
+                            <SectionLabel>× contact</SectionLabel>
                             <h2
                                 className="font-display italic text-ink leading-[1.1] mb-6"
                                 style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
@@ -43,14 +85,13 @@ export default function ContactSection() {
                         </motion.div>
 
                         <motion.p variants={fadeUp} className="font-serif text-[1rem] text-void leading-[1.85] mb-8">
-                            Whether you have a project in mind, a question to ask, or just something to say — the white space is open.
+                            Whether you have a project in mind, a question to ask, or just something to say.
                         </motion.p>
 
                         <motion.div variants={fadeUp} className="space-y-5">
                             {[
                                 { label: "EMAIL", value: "your@email.com" },
-                                { label: "ELSEWHERE", value: "@yourhandle" },
-                                { label: "RESPONSE TIME", value: "...when i find the right words" },
+                                { label: "Location", value: "@yourhandle" },
                             ].map((item, i) => (
                                 <div key={i} className="border-b border-dashed border-ash pb-4">
                                     <p className="font-mono text-[0.58rem] text-fog tracking-widest mb-1">{item.label}</p>
@@ -84,10 +125,7 @@ export default function ContactSection() {
                                         ...it landed somewhere in the white space. i'll find it.
                                     </p>
                                     <button
-                                        onClick={() => {
-                                            setSent(false);
-                                            setValues({ name: "", contact: "", message: "" });
-                                        }}
+                                        onClick={resetForm}
                                         className="mt-8 font-mono text-[0.6rem] text-fog tracking-widest border-b border-smudge pb-0.5 hover:text-void transition-colors"
                                     >
                                         send another
@@ -104,7 +142,7 @@ export default function ContactSection() {
                                                     value={values[field.key]}
                                                     onFocus={() => setFocused(i)}
                                                     onBlur={() => setFocused(null)}
-                                                    onChange={(e) => setValues({ ...values, [field.key]: e.target.value })}
+                                                    onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                                     className="contact-field w-full resize-none"
                                                     style={{
                                                         fontFamily:
@@ -119,7 +157,7 @@ export default function ContactSection() {
                                                     value={values[field.key]}
                                                     onFocus={() => setFocused(i)}
                                                     onBlur={() => setFocused(null)}
-                                                    onChange={(e) => setValues({ ...values, [field.key]: e.target.value })}
+                                                    onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                                     className="contact-field w-full"
                                                     style={{
                                                         fontFamily:
@@ -131,12 +169,59 @@ export default function ContactSection() {
                                         </motion.div>
                                     ))}
 
+                                    {/* DATA PRIVACY AGREEMENT */}
+                                    <motion.div variants={fadeUp} className="mb-8">
+                                        <label className="flex items-start gap-3 cursor-pointer group">
+                                            <input
+                                                type="checkbox"
+                                                checked={privacyAgreed}
+                                                onChange={(e) => handlePrivacyChange(e.target.checked)}
+                                                className="mt-0.5 w-4 h-4 accent-void bg-bone border-ash rounded-sm focus:ring-0 focus:ring-offset-0"
+                                            />
+                                            <span className="font-mono text-[0.7rem] text-void leading-relaxed tracking-wide">
+                                                I agree to the{" "}
+                                                <span className="border-b border-smudge italic">data privacy terms</span> — my name, email, and message will only be used to reply, never shared or stored forever.
+                                            </span>
+                                        </label>
+                                    </motion.div>
+
+                                    {/* FORM ERROR MESSAGE */}
+                                    {formError && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -4 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            className="mb-6"
+                                        >
+                                            <p className="font-mono text-[0.7rem] text-[#c8686e] border-l-2 border-[#c8686e] pl-3 italic">
+                                                {formError}
+                                            </p>
+                                        </motion.div>
+                                    )}
+
                                     <motion.div variants={fadeUp}>
                                         <button
                                             onClick={handleSubmit}
-                                            className="font-display italic text-ink text-[1.05rem] border-b border-ink pb-0.5 flex items-center gap-2 hover:opacity-60 transition-opacity"
+                                            className="
+        font-display italic
+        text-paper
+        bg-ink
+        border border-ink
+        rounded-none
+
+        px-6 py-1
+        min-w-[140px]
+
+        text-[1.05rem]
+        flex items-center justify-center gap-2
+
+        transition-all duration-300 ease-dream
+
+        hover:bg-paper
+        hover:text-ink
+        hover:border-ink
+    "
                                         >
-                                            ◈ send it into the white
+                                            Submit
                                         </button>
                                     </motion.div>
                                 </motion.div>

@@ -30,7 +30,7 @@ export default function HeroSection({ onNavigate }) {
                 className="relative z-10 text-center px-6 max-w-3xl"
             >
                 <motion.p variants={fadeUp} className="font-mono text-[0.62rem] text-fog tracking-[0.2em] mb-6 uppercase">
-                    ○ portfolio / 2024
+                    ○ portfolio 2.0
                 </motion.p>
 
                 <motion.h1
@@ -38,9 +38,7 @@ export default function HeroSection({ onNavigate }) {
                     className="font-display italic text-ink leading-[1.08] mb-8"
                     style={{ fontSize: "clamp(3.5rem, 9vw, 7.5rem)" }}
                 >
-                    something<br />
-                    in the<br />
-                    white space
+                    something
                 </motion.h1>
 
                 <motion.p variants={fadeUp} className="font-serif italic text-fog text-[1.05rem] mb-12 max-w-sm mx-auto leading-relaxed">
@@ -59,15 +57,6 @@ export default function HeroSection({ onNavigate }) {
                     ))}
                 </motion.div>
             </motion.div>
-
-            {/* Corner annotation */}
-            <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, transition: { delay: 1.5, duration: 1 } }}
-                className="absolute bottom-8 right-8 font-display italic text-[0.78rem] text-smudge"
-            >
-                scroll to begin →
-            </motion.p>
         </motion.div>
     );
 }

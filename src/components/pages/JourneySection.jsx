@@ -22,7 +22,7 @@ export default function JourneySection() {
             <div className="max-w-6xl mx-auto px-6 py-20">
                 <motion.div variants={stagger} initial="hidden" animate="show">
                     <motion.div variants={fadeUp} className="mb-16">
-                        <SectionLabel>△ timeline / journey</SectionLabel>
+                        <SectionLabel>△ journey</SectionLabel>
                         <h2
                             className="font-display italic text-ink leading-[1.1] mb-3"
                             style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
@@ -30,7 +30,7 @@ export default function JourneySection() {
                             how i got<br />here
                         </h2>
                         <p className="font-serif italic text-[1rem] text-fog max-w-md">
-                            ...a record of becoming. Each entry is a chapter. Some are longer than others.
+                            ...a record of becoming.
                         </p>
                     </motion.div>
                 </motion.div>

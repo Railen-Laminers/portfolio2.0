@@ -9,14 +9,6 @@ export const PROJECTS = [
         desc: "A short description of the work — what it was, what it became.",
     },
     {
-        title: "white space study",
-        year: "2023 — ongoing",
-        tag: "COLLAB",
-        accent: "#c8d9c4",
-        rotate: -0.8,
-        desc: "Describe the process, the collaboration, the question it tried to answer.",
-    },
-    {
         title: "a recurring dream",
         year: "2024",
         tag: "ONGOING",
@@ -40,14 +32,6 @@ export const PROJECTS = [
         rotate: 0.9,
         desc: "A project that took a long time. That changed shape many times.",
     },
-    {
-        title: "for someone else",
-        year: "2024",
-        tag: "COLLAB",
-        accent: "#c8d9c4",
-        rotate: -0.3,
-        desc: "Made for another person, another place. Still carries your fingerprints.",
-    },
 ];
 
-export const PROJECT_FILTERS = ["ALL", "PERSONAL", "COLLAB", "ONGOING", "ARCHIVED"];
+export const PROJECT_FILTERS = ["ALL", "PERSONAL", "ONGOING", "ARCHIVED"];

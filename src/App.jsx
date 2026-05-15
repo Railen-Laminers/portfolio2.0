@@ -41,17 +41,8 @@ export default function App() {
 
       {page !== "home" && (
         <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
-          <button
-            onClick={() => setPage("home")}
-            className="font-display italic text-smudge text-[0.85rem] hover:text-void transition-colors"
-          >
-            ◈ you
-          </button>
           <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
             ...assets and illustrations to be added.
-          </span>
-          <span className="font-mono text-[0.55rem] text-smudge tracking-widest hidden md:block">
-            {String(NAV.findIndex((n) => n.id === page) + 1).padStart(2, "0")} / 04
           </span>
         </footer>
       )}

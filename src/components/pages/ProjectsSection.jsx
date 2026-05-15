@@ -23,7 +23,7 @@ export default function ProjectsSection() {
             <div className="max-w-6xl mx-auto px-6 py-20">
                 <motion.div variants={stagger} initial="hidden" animate="show">
                     <motion.div variants={fadeUp}>
-                        <SectionLabel>□ works / projects</SectionLabel>
+                        <SectionLabel>□ projects</SectionLabel>
                         <h2
                             className="font-display italic text-ink leading-[1.1] mb-3"
                             style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
