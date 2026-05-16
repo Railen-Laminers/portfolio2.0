@@ -6,6 +6,8 @@ import AboutSection from "./components/pages/AboutSection";
 import ProjectsSection from "./components/pages/ProjectsSection";
 import JourneySection from "./components/pages/JourneySection";
 import ContactSection from "./components/pages/ContactSection";
+import MiniGamesSection from "./components/pages/MiniGamesSection";
+import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
 
 export default function App() {
@@ -17,7 +19,6 @@ export default function App() {
   }, [location.pathname]);
 
   return (
-    // GLOBAL BACKGROUND WRAPPER
     <div className="relative min-h-screen bg-bone overflow-hidden">
       {/* Global notebook grid lines */}
       <div
@@ -41,6 +42,8 @@ export default function App() {
             <Route path="/projects" element={<ProjectsSection />} />
             <Route path="/journey" element={<JourneySection />} />
             <Route path="/contact" element={<ContactSection />} />
+            <Route path="/minigames" element={<MiniGamesSection />} />
+            <Route path="/minigames/flappybird" element={<FlappyBird />} />
           </Routes>
         </AnimatePresence>
 
@@ -48,7 +51,7 @@ export default function App() {
           <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
             <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
               ...
-            </span>  {/* assets and illustrations to be added. */}
+            </span>
           </footer>
         )}
       </div>

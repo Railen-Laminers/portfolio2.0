@@ -1,4 +1,3 @@
-// src/components/common/Navigation.jsx
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { NAV } from "../../data/navData";
@@ -13,7 +12,6 @@ export default function Navigation() {
 
     const getActiveId = () => {
         const path = location.pathname.slice(1);
-        // Return "home" for the root path so active state works correctly
         return path === "" ? "home" : path;
     };
 
@@ -22,12 +20,15 @@ export default function Navigation() {
         closeMenu();
     };
 
+    // Find current index for page marker (1-based)
+    const currentIndex = NAV.findIndex((n) => n.id === getActiveId()) + 1;
+    const totalPages = NAV.length;
+
     return (
         <header className="fixed top-0 left-0 right-0 z-50 bg-bone/90 backdrop-blur-sm border-b border-ash">
             {/* ===== DESKTOP NAVIGATION (md and up) ===== */}
             <div className="hidden md:block">
                 <nav className="max-w-6xl mx-auto px-6 flex items-stretch h-14">
-                    {/* Logo - now redirects to home */}
                     <button
                         onClick={() => handleLinkClick("home")}
                         className="font-display italic text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
@@ -35,7 +36,6 @@ export default function Navigation() {
                         ◈
                     </button>
 
-                    {/* Links */}
                     <div className="flex items-stretch gap-0">
                         {NAV.map((item) => {
                             const isActive = getActiveId() === item.id;
@@ -49,7 +49,6 @@ export default function Navigation() {
                                         isActive ? "border-ink" : "border-transparent",
                                     ].join(" ")}
                                 >
-                                    {/* Glyph - black when inactive, ink color when active, no opacity on active */}
                                     <span
                                         className="transition-all duration-300"
                                         style={{
@@ -61,7 +60,6 @@ export default function Navigation() {
                                     >
                                         {item.glyph}
                                     </span>
-                                    {/* Label - consistent monospace uppercase, active = darker + border */}
                                     <span
                                         className="transition-all duration-300"
                                         style={{
@@ -81,10 +79,9 @@ export default function Navigation() {
                         })}
                     </div>
 
-                    {/* Spacer + page marker */}
                     <div className="ml-auto flex items-center">
                         <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-                            {String(NAV.findIndex((n) => n.id === getActiveId()) + 1).padStart(2, "0")} / 04
+                            {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
                     </div>
                 </nav>
@@ -101,7 +98,7 @@ export default function Navigation() {
                     </button>
                     <div className="flex items-center gap-3">
                         <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-                            {String(NAV.findIndex((n) => n.id === getActiveId()) + 1).padStart(2, "0")} / 04
+                            {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
                         <button
                             onClick={toggleMenu}
