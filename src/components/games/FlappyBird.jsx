@@ -518,14 +518,14 @@ export default function FlappyBird() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen pt-14"
+            className="min-h-screen pt-8 md:pt-14"
         >
-            <div className="max-w-6xl mx-auto px-6 py-20">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 md:py-20">
                 <motion.div
                     variants={stagger}
                     initial="hidden"
                     animate="show"
-                    className="flex flex-col items-center"
+                    className="flex flex-col items-start" // Left-aligned on all screens
                 >
                     <motion.div variants={fadeUp} className="w-full">
                         <SectionLabel>⌂ play</SectionLabel>
@@ -535,22 +535,25 @@ export default function FlappyBird() {
                         >
                             flappy<br />bird
                         </h2>
-                        <p className="font-serif text-[1rem] text-void italic mb-8 max-w-md text-center md:text-left">
+                        <p className="font-serif text-sm md:text-[1rem] text-void italic mb-8 max-w-md">
                             ...a tiny, restless thing. tap to keep it from the pipes.
                         </p>
                     </motion.div>
 
-                    <motion.div variants={fadeUp} className="relative">
-                        <SketchCard rotate={0.8} accent="#e8cdd4" className="inline-block mx-auto">
-                            <canvas
-                                ref={canvasRef}
-                                className="flappy-canvas block border border-smudge"
-                                width={W}
-                                height={H}
-                                style={{ display: "block" }}
-                            />
+                    <motion.div variants={fadeUp} className="relative w-full flex justify-center">
+                        <SketchCard rotate={0.8} accent="#e8cdd4" className="inline-block w-full md:w-auto">
+                            <div className="flex justify-center">
+                                <canvas
+                                    ref={canvasRef}
+                                    className="flappy-canvas block border border-smudge w-full h-auto max-w-full"
+                                    width={W}
+                                    height={H}
+                                    style={{ display: "block", width: "100%", height: "auto", maxWidth: "100%" }}
+                                />
+                            </div>
                         </SketchCard>
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                        {/* TapeStrip hidden on mobile for cleaner layout */}
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 hidden sm:block">
                             <TapeStrip color="#d4c9e8">TAP / SPACE</TapeStrip>
                         </div>
                     </motion.div>
@@ -560,6 +563,17 @@ export default function FlappyBird() {
             <style jsx>{`
                 .flappy-canvas {
                     cursor: crosshair;
+                    touch-action: manipulation;
+                }
+                // Pulsing effect on the canvas to indicate interactivity
+                // .flappy-canvas:active {
+                //     transform: scale(0.99);
+                //     transition: transform 0.05s ease;
+                // }
+                @media (max-width: 640px) {
+                    .flappy-canvas {
+                        border-width: 1px;
+                    }
                 }
             `}</style>
             <link
