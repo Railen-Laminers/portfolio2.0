@@ -28,8 +28,8 @@ export default function App() {
             "repeating-linear-gradient(0deg, transparent, transparent 27px, var(--smudge) 27px, var(--smudge) 28px)",
         }}
       />
-      {/* Global left margin rule – use CSS variable */}
-      <div className="absolute top-0 bottom-0 left-[72px] w-px bg-blush opacity-60 hidden md:block" />
+      {/* Global left margin rule – only visible on desktop screens (≥1024px) */}
+      <div className="absolute top-0 bottom-0 left-[72px] w-px bg-blush opacity-60 hidden lg:block" />
 
       {/* Foreground content */}
       <div className="relative z-10">

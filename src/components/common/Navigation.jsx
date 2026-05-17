@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from "react";
+// src/components/common/Navigation.jsx
+import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 import { NAV } from "../../data/navData";
 
-// ── OMORI Eye Icon Components ────────────────────────────────────────────────
+// ── OMORI Eye Icon Components (unchanged) ───────────────────────────────────
 
 function EyeOpen({ size = 28 }) {
     return (
@@ -19,7 +21,6 @@ function EyeOpen({ size = 28 }) {
             <line x1="42" y1="8" x2="44" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <path d="M5 23 C13 11 51 11 59 23 C51 35 13 35 5 23 Z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
             <circle cx="32" cy="23" r="10" fill="currentColor" />
-            {/* Use CSS variable for pupil and highlight so they adapt to dark mode */}
             <circle cx="32" cy="23" r="4" fill="currentColor" />
             <circle cx="36" cy="19" r="1.5" fill="var(--fog)" />
             <circle cx="28" cy="27" r="1" fill="var(--fog)" />
@@ -49,7 +50,7 @@ function EyeClosed({ size = 28 }) {
     );
 }
 
-// ── Dark Mode Toggle Button ──────────────────────────────────────────────────
+// ── Dark Mode Toggle Button (now uses theme from context) ───────────────────
 
 function DarkModeToggle({ isDark, onToggle }) {
     return (
@@ -68,7 +69,7 @@ function DarkModeToggle({ isDark, onToggle }) {
     );
 }
 
-// ── Reusable Navigation Link ────────────────────────────────────────────────
+// ── Reusable Navigation Link (unchanged) ────────────────────────────────────
 
 function NavLink({ item, isActive, onClick, mobile = false }) {
     const baseClasses = mobile
@@ -98,39 +99,17 @@ function NavLink({ item, isActive, onClick, mobile = false }) {
     );
 }
 
-// ── Navigation Component ────────────────────────────────────────────────────
+// ── Navigation Component (UPDATED) ──────────────────────────────────────────
 
 export default function Navigation() {
     const navigate = useNavigate();
     const location = useLocation();
+    const { theme, toggleTheme } = useTheme();   // 👈 use global theme
+    const isDark = theme === 'dark';
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isDark, setIsDark] = useState(false);
-
     const closeMenu = useCallback(() => setIsMenuOpen(false), []);
     const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
-
-    const toggleDark = useCallback(() => {
-        setIsDark((prev) => {
-            const next = !prev;
-            document.documentElement.classList.toggle("dark", next);
-            return next;
-        });
-    }, []);
-
-    useEffect(() => {
-        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-        const handleChange = (e) => {
-            setIsDark(e.matches);
-            document.documentElement.classList.toggle("dark", e.matches);
-        };
-
-        setIsDark(mediaQuery.matches);
-        document.documentElement.classList.toggle("dark", mediaQuery.matches);
-
-        mediaQuery.addEventListener("change", handleChange);
-        return () => mediaQuery.removeEventListener("change", handleChange);
-    }, []);
 
     const getActiveId = useCallback(() => {
         const path = location.pathname.slice(1);
@@ -154,15 +133,12 @@ export default function Navigation() {
             {/* ===== DESKTOP NAVIGATION ===== */}
             <div className="hidden md:block">
                 <nav className="max-w-6xl mx-auto px-6 flex items-stretch h-14">
-                    {/* Logo */}
                     <button
                         onClick={() => handleLinkClick("home")}
                         className="font-display text-[1.05rem] text-ink pr-6 border-r border-ash mr-6 flex items-center shrink-0 transition-opacity hover:opacity-60"
                     >
                         ◈
                     </button>
-
-                    {/* Nav links */}
                     <div className="flex items-stretch gap-0">
                         {NAV.map((item) => (
                             <NavLink
@@ -173,19 +149,17 @@ export default function Navigation() {
                             />
                         ))}
                     </div>
-
-                    {/* Right side */}
                     <div className="ml-auto flex items-center gap-5">
                         <span className="font-mono text-[0.55rem] text-void tracking-widest">
                             {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
                         <span className="block w-px h-7 bg-smudge" />
-                        <DarkModeToggle isDark={isDark} onToggle={toggleDark} />
+                        <DarkModeToggle isDark={isDark} onToggle={toggleTheme} />
                     </div>
                 </nav>
             </div>
 
-            {/* ===== MOBILE NAVIGATION (with vertical separators) ===== */}
+            {/* ===== MOBILE NAVIGATION ===== */}
             <div className="md:hidden">
                 <div className="flex items-center justify-between h-14 px-4 sm:px-6">
                     <button
@@ -194,23 +168,13 @@ export default function Navigation() {
                     >
                         ◈
                     </button>
-
                     <div className="flex items-center gap-3">
-                        {/* Page counter */}
                         <span className="font-mono text-[0.55rem] text-void tracking-widest">
                             {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
-
-                        {/* Vertical separator */}
                         <span className="w-px h-5 bg-smudge" />
-
-                        {/* Dark mode toggle */}
-                        <DarkModeToggle isDark={isDark} onToggle={toggleDark} />
-
-                        {/* Vertical separator (optional, but matches desktop consistency) */}
+                        <DarkModeToggle isDark={isDark} onToggle={toggleTheme} />
                         <span className="w-px h-5 bg-smudge" />
-
-                        {/* Burger menu button */}
                         <button
                             onClick={toggleMenu}
                             className="flex flex-col items-center justify-center w-8 h-8 rounded-md transition-colors hover:bg-ash/10 focus:outline-none"
@@ -233,8 +197,6 @@ export default function Navigation() {
                         </button>
                     </div>
                 </div>
-
-                {/* Mobile menu drawer */}
                 {isMenuOpen && (
                     <div className="absolute top-14 left-0 right-0 bg-paper border-b border-ash shadow-lg z-40 animate-in slide-in-from-top-2 duration-200">
                         <div className="flex flex-col py-2">
