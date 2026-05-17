@@ -1,4 +1,3 @@
-// src/components/common/SketchCard.jsx
 import { useState } from "react";
 import { motion } from "framer-motion";
 
@@ -10,7 +9,7 @@ export default function SketchCard({ children, rotate = 0, accent = null, classN
             animate={{
                 rotate: hovered ? 0 : rotate,
                 y: hovered ? -4 : 0,
-                boxShadow: hovered ? "0 10px 40px rgba(26,26,26,0.1)" : "0 2px 8px rgba(26,26,26,0.04)",
+                boxShadow: hovered ? "0 10px 40px rgba(0,0,0,0.15)" : "0 2px 8px rgba(0,0,0,0.06)",
             }}
             transition={{ duration: 0.35, ease: "easeOut" }}
             onHoverStart={() => setHovered(true)}

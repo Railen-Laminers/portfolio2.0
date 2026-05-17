@@ -5,7 +5,6 @@ import SectionLabel from "../common/SectionLabel";
 import SketchCard from "../common/SketchCard";
 
 export default function ContactSection() {
-    const [focused, setFocused] = useState(null);
     const [sent, setSent] = useState(false);
     const [values, setValues] = useState({ name: "", email: "", message: "" });
     const [privacyAgreed, setPrivacyAgreed] = useState(false);
@@ -65,7 +64,6 @@ export default function ContactSection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            // Removed bg-bone
             className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
@@ -136,30 +134,16 @@ export default function ContactSection() {
                                                     rows={field.rows}
                                                     placeholder={field.placeholder}
                                                     value={values[field.key]}
-                                                    onFocus={() => setFocused(i)}
-                                                    onBlur={() => setFocused(null)}
                                                     onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                                     className="contact-field w-full resize-none"
-                                                    style={{
-                                                        fontFamily:
-                                                            focused === i ? "'IM Fell English', Georgia, serif" : "'Space Mono', monospace",
-                                                        fontStyle: focused === i ? "italic" : "normal",
-                                                    }}
                                                 />
                                             ) : (
                                                 <input
                                                     type={field.type}
                                                     placeholder={field.placeholder}
                                                     value={values[field.key]}
-                                                    onFocus={() => setFocused(i)}
-                                                    onBlur={() => setFocused(null)}
                                                     onChange={(e) => handleFieldChange(field.key, e.target.value)}
                                                     className="contact-field w-full"
-                                                    style={{
-                                                        fontFamily:
-                                                            focused === i ? "'IM Fell English', Georgia, serif" : "'Space Mono', monospace",
-                                                        fontStyle: focused === i ? "italic" : "normal",
-                                                    }}
                                                 />
                                             )}
                                         </motion.div>

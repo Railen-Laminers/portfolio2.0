@@ -1,15 +1,10 @@
-/* ============================================================
-   OMORI-INSPIRED PORTFOLIO — CLEANED CSS
-   Only used styles + essential base
-   ============================================================ */
-
 @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Special+Elite&family=Crimson+Pro:ital,wght@0,400;0,600;1,400;1,600&family=Space+Mono:wght@400;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ─── CSS CUSTOM PROPERTIES (used by Tailwind config) ──────── */
+/* Light mode (default) */
 :root {
     --ink: #1a1a1a;
     --void: #2d2b28;
@@ -22,11 +17,31 @@
     --blush: #e8cdd4;
     --sage: #c8d9c4;
     --sky: #c4d4e8;
-    --font-display: 'IM Fell English', Georgia, 'Times New Roman', serif;
-    --font-mono: 'Space Mono', 'Courier New', monospace;
 }
 
-/* ─── BASE RESET ───────────────────────────────────────────── */
+/* Dark mode – brighter text for better readability */
+.dark {
+    --ink: #f0f0f0;        /* was #e5e5e5 – now brighter white */
+    --void: #e6e6e6;       /* was #b0b0b0 – now light silver */
+    --fog: #a0a0a0;        /* was #7a7a7a – now mid-light grey */
+    --smudge: #4a4a4a;
+    --ash: #2e2e2e;
+    --bone: #1e1e1e;
+    --paper: #252525;
+    --lav: #5e5280;
+    --blush: #8f5c68;
+    --sage: #4f6b4b;
+    --sky: #4f688b;
+}
+
+/* Smooth transitions for colour changes – unified */
+*,
+*::before,
+*::after {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, fill 0.2s ease, stroke 0.2s ease;
+}
+
+/* Base reset */
 *,
 *::before,
 *::after {
@@ -47,7 +62,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Crosshair cursor (kept for style) */
+/* Crosshair cursor */
 * {
     cursor: crosshair;
 }
@@ -77,7 +92,6 @@ label {
     color: var(--void);
 }
 
-/* ─── CONTACT FORM FIELDS (used in ContactSection) ─────────── */
 .contact-field {
     background: transparent;
     border: none;
@@ -85,16 +99,17 @@ label {
     outline: none;
     padding: 0.5rem 0 0.6rem;
     width: 100%;
-    font-family: var(--font-mono);
+    font-family: 'Space Mono', monospace;
     font-size: 0.82rem;
+    font-style: normal;
     color: var(--ink);
     letter-spacing: 0.04em;
-    transition: border-color 0.35s ease, font-family 0.2s ease;
+    transition: border-color 0.35s ease;
     resize: none;
 }
 
 .contact-field::placeholder {
-    font-family: var(--font-mono);
+    font-family: 'Space Mono', monospace;
     font-size: 0.75rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -110,7 +125,7 @@ label {
     color: var(--fog);
 }
 
-/* ─── SCROLLBAR ────────────────────────────────────────────── */
+/* Scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -129,13 +144,12 @@ label {
     background: var(--fog);
 }
 
-/* ─── PRINT STYLES (optional, harmless) ────────────────────── */
+/* Print styles */
 @media print {
     body {
         background: white;
         color: black;
     }
-
     .nav-link,
     footer,
     .tape {
@@ -143,9 +157,8 @@ label {
     }
 }
 
-/* ─── REDUCED MOTION ───────────────────────────────────────── */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-
     *,
     *::before,
     *::after {

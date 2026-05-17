@@ -19,9 +19,10 @@ function EyeOpen({ size = 28 }) {
             <line x1="42" y1="8" x2="44" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <path d="M5 23 C13 11 51 11 59 23 C51 35 13 35 5 23 Z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
             <circle cx="32" cy="23" r="10" fill="currentColor" />
-            <circle cx="32" cy="23" r="4" fill="#000000" />
-            <circle cx="36" cy="19" r="1.5" fill="#ffffff" />
-            <circle cx="28" cy="27" r="1" fill="#ffffff" />
+            {/* Use CSS variable for pupil and highlight so they adapt to dark mode */}
+            <circle cx="32" cy="23" r="4" fill="currentColor" />
+            <circle cx="36" cy="19" r="1.5" fill="var(--fog)" />
+            <circle cx="28" cy="27" r="1" fill="var(--fog)" />
             <line x1="20" y1="34" x2="18" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="32" y1="36" x2="32" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="44" y1="34" x2="46" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
@@ -178,26 +179,38 @@ export default function Navigation() {
                         <span className="font-mono text-[0.55rem] text-void tracking-widest">
                             {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
-                        <span className="block w-px h-7 bg-ash" />
+                        <span className="block w-px h-7 bg-smudge" />
                         <DarkModeToggle isDark={isDark} onToggle={toggleDark} />
                     </div>
                 </nav>
             </div>
 
-            {/* ===== MOBILE NAVIGATION ===== */}
+            {/* ===== MOBILE NAVIGATION (with vertical separators) ===== */}
             <div className="md:hidden">
                 <div className="flex items-center justify-between h-14 px-4 sm:px-6">
                     <button
                         onClick={() => handleLinkClick("home")}
-                        className="font-display italic text-[1.05rem] text-ink flex items-center transition-opacity hover:opacity-60"
+                        className="font-display text-[1.05rem] text-ink flex items-center transition-opacity hover:opacity-60"
                     >
                         ◈
                     </button>
+
                     <div className="flex items-center gap-3">
+                        {/* Page counter */}
                         <span className="font-mono text-[0.55rem] text-void tracking-widest">
                             {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
+
+                        {/* Vertical separator */}
+                        <span className="w-px h-5 bg-smudge" />
+
+                        {/* Dark mode toggle */}
                         <DarkModeToggle isDark={isDark} onToggle={toggleDark} />
+
+                        {/* Vertical separator (optional, but matches desktop consistency) */}
+                        <span className="w-px h-5 bg-smudge" />
+
+                        {/* Burger menu button */}
                         <button
                             onClick={toggleMenu}
                             className="flex flex-col items-center justify-center w-8 h-8 rounded-md transition-colors hover:bg-ash/10 focus:outline-none"
@@ -221,6 +234,7 @@ export default function Navigation() {
                     </div>
                 </div>
 
+                {/* Mobile menu drawer */}
                 {isMenuOpen && (
                     <div className="absolute top-14 left-0 right-0 bg-paper border-b border-ash shadow-lg z-40 animate-in slide-in-from-top-2 duration-200">
                         <div className="flex flex-col py-2">
@@ -233,14 +247,6 @@ export default function Navigation() {
                                     mobile
                                 />
                             ))}
-                            <div className="flex items-center gap-4 px-6 py-3 border-t border-ash mt-1">
-                                <span className="font-mono text-[0.62rem] tracking-[0.1em] text-fog uppercase">
-                                    Display
-                                </span>
-                                <div className="ml-auto">
-                                    <DarkModeToggle isDark={isDark} onToggle={toggleDark} />
-                                </div>
-                            </div>
                         </div>
                     </div>
                 )}
