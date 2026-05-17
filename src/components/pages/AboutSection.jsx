@@ -67,9 +67,9 @@ export default function AboutSection() {
                                     loading="lazy"
                                 />
                             ) : (
-                                <Crosshatch 
-                                    className="w-full aspect-[3/4] border border-smudge" 
-                                    label="[ portrait unavailable ]" 
+                                <Crosshatch
+                                    className="w-full aspect-[3/4] border border-smudge"
+                                    label="[ portrait unavailable ]"
                                 />
                             )}
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
@@ -77,7 +77,7 @@ export default function AboutSection() {
                         </div>
                         <SketchCard rotate={1.2} accent="#c8d9c4" className="mt-2">
                             <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">NOTE TO SELF /</p>
-                            <p className="font-serif italic text-[0.9rem] text-void leading-relaxed">
+                            <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                                 ...Start small. Improve every version.
                             </p>
                         </SketchCard>

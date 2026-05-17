@@ -97,7 +97,7 @@ export default function ContactSection() {
 
                         <motion.div variants={fadeUp} className="mt-10">
                             <SketchCard rotate={1.1} accent="#c4d4e8">
-                                <p className="font-display italic text-[0.88rem] text-void leading-relaxed">
+                                <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm leading-relaxed">
                                     ...messages received in order of sincerity, not urgency.
                                 </p>
                             </SketchCard>

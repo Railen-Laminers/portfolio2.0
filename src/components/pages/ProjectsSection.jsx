@@ -65,7 +65,7 @@ export default function ProjectsSection() {
                         >
                             things<br />made
                         </h2>
-                        <p className="font-serif text-[1rem] text-void italic mb-10 max-w-md">
+                        <p className="font-serif italic text-[0.9rem] text-void mb-4 leading-relaxed">
                             ...a collection of works. Some finished, some ongoing, some just begun.
                         </p>
                     </motion.div>
@@ -135,7 +135,7 @@ export default function ProjectsSection() {
                 >
                     <SketchCard rotate={-0.6} accent="#e8d4c8">
                         <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
-                        <p className="font-display italic text-[0.9rem] text-void leading-relaxed">
+                        <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                             ...each project began as a scribble on a sticky note. some stayed, some evolved.
                         </p>
                     </SketchCard>

@@ -87,7 +87,7 @@ export default function MiniGamesSection() {
                 >
                     <SketchCard rotate={0.7} accent="#c8d9c4" className="max-w-xs">
                         <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">NOTE /</p>
-                        <p className="font-display italic text-[0.9rem] text-void leading-relaxed">
+                        <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                             ...sometimes the best game is the one you invent yourself.
                         </p>
                     </SketchCard>
