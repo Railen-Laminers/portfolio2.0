@@ -21,7 +21,7 @@ export default function HeroSection() {
                 className="relative z-10 text-center px-6 max-w-3xl"
             >
                 <motion.p variants={fadeUp} className="font-mono text-[0.62rem] text-void tracking-[0.2em] mb-6 uppercase">
-                    ○ portfolio 2.0
+                    ◈ portfolio 2.0
                 </motion.p>
 
                 <motion.h1

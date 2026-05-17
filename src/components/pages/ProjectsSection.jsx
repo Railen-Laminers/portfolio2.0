@@ -7,6 +7,7 @@ import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
 import Crosshatch from "../common/Crosshatch";
 import SketchCard from "../common/SketchCard";
+import DashedRule from "../common/DashedRule"; // <-- added import
 
 // Helper component with image support
 function CardContent({ project }) {
@@ -36,7 +37,7 @@ function CardContent({ project }) {
                 {project.desc}
             </p>
             <div className="mt-4 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <span className="font-mono text-[0.58rem] text-smudge tracking-widest">view →</span>
+                <span className="font-mono text-[0.58rem] text-void tracking-widest">view →</span>
             </div>
         </>
     );
@@ -121,6 +122,23 @@ export default function ProjectsSection() {
                             </motion.div>
                         ))}
                     </AnimatePresence>
+                </motion.div>
+
+                {/* --- sticky note added here (like other sections) --- */}
+                <DashedRule />
+
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1, transition: { duration: 0.6 } }}
+                    viewport={{ once: true }}
+                    className="flex justify-end mt-12"
+                >
+                    <SketchCard rotate={-0.6} accent="#e8d4c8">
+                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
+                        <p className="font-display italic text-[0.9rem] text-void leading-relaxed">
+                            ...each project began as a scribble on a sticky note. some stayed, some evolved.
+                        </p>
+                    </SketchCard>
                 </motion.div>
             </div>
         </motion.div>

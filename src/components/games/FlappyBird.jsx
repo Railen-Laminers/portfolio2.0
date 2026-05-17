@@ -31,6 +31,7 @@ export default function FlappyBird() {
     const GRAVITY = 0.22;
     const JUMP = -4.6;
     const SPEED = 2.4;
+    const SPAWN_FRAMES = 28; // ~0.5s at 60fps
 
     // --- Helper functions -------------------------------------------------
     const makeEyes = (pipeH) => {
@@ -56,7 +57,7 @@ export default function FlappyBird() {
         return eyes;
     };
 
-    const spawnPipe = (x) => {
+    const spawnPipe = (x, fullyGrown = false) => {
         const topH = Math.random() * (GROUND_Y - GAP - 80) + 50;
         pipesRef.current.push({
             x,
@@ -66,6 +67,7 @@ export default function FlappyBird() {
             topEyes: makeEyes(topH),
             botEyes: makeBotEyes(topH + GAP),
             blinkT: Math.random() * 100,
+            spawnProgress: fullyGrown ? 1 : 0,
         });
     };
 
@@ -112,7 +114,10 @@ export default function FlappyBird() {
         particlesRef.current = [];
         bloodPoolsRef.current = [];
         stateRef.current = "playing";
-        for (let i = 0; i < 3; i++) spawnPipe(W + i * PIPE_SPACING);
+        // First pipe fully grown (already on screen), subsequent ones animate in
+        for (let i = 0; i < 3; i++) {
+            spawnPipe(W + i * PIPE_SPACING, i === 0);
+        }
     };
 
     const checkCollision = () => {
@@ -120,8 +125,14 @@ export default function FlappyBird() {
         if (bird.y + BIRD_R >= GROUND_Y) return "ground";
         if (bird.y - BIRD_R <= 0) return "ceil";
         for (const p of pipesRef.current) {
+            // Only collide with fully (or nearly) grown pipes
+            if (p.spawnProgress < 0.5) continue;
             if (BIRD_X + BIRD_R > p.x && BIRD_X - BIRD_R < p.x + PIPE_W) {
-                if (bird.y - BIRD_R < p.topH || bird.y + BIRD_R > p.botY) return "pipe";
+                const t = p.spawnProgress;
+                const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+                const topDrawH = p.topH * ease;
+                const botStart = p.botY + (GROUND_Y - p.botY) * (1 - ease);
+                if (bird.y - BIRD_R < topDrawH || bird.y + BIRD_R > botStart) return "pipe";
             }
         }
         return null;
@@ -258,23 +269,50 @@ export default function FlappyBird() {
     const drawPipe = (p) => {
         const ctx = ctxRef.current;
         const blink = Math.sin((frameRef.current - p.blinkT) * 0.08) > 0.96;
+
+        // Quadratic ease-in-out for smooth growth
+        const t = p.spawnProgress;
+        const ease = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+        // Top pipe grows downward from the ceiling
+        const topDrawH = p.topH * ease;
+        // Bottom pipe grows upward from the ground
+        const botStart = p.botY + (GROUND_Y - p.botY) * (1 - ease);
+        const botDrawH = GROUND_Y - botStart;
+
+        ctx.save();
+        ctx.globalAlpha = 0.15 + ease * 0.85; // subtle fade-in alongside the grow
+
+        // Top pipe
         ctx.fillStyle = "#1a1a1a";
-        ctx.fillRect(p.x, 0, PIPE_W, p.topH);
+        ctx.fillRect(p.x, 0, PIPE_W, topDrawH);
         ctx.strokeStyle = "rgba(245,242,235,0.1)";
         ctx.lineWidth = 0.5;
-        ctx.strokeRect(p.x, 0, PIPE_W, p.topH);
+        ctx.strokeRect(p.x, 0, PIPE_W, topDrawH);
+
+        // Bottom pipe
         ctx.fillStyle = "#1a1a1a";
-        ctx.fillRect(p.x, p.botY, PIPE_W, GROUND_Y - p.botY);
+        ctx.fillRect(p.x, botStart, PIPE_W, botDrawH);
         ctx.strokeStyle = "rgba(245,242,235,0.1)";
         ctx.lineWidth = 0.5;
-        ctx.strokeRect(p.x, p.botY, PIPE_W, GROUND_Y - p.botY);
-        for (const e of p.topEyes) {
-            drawEye(p.x + e.lx, e.y, blink);
-            drawEye(p.x + e.rx, e.y, blink);
-        }
-        for (const e of p.botEyes) {
-            drawEye(p.x + e.lx, p.botY + e.y, blink);
-            drawEye(p.x + e.rx, p.botY + e.y, blink);
+        ctx.strokeRect(p.x, botStart, PIPE_W, botDrawH);
+
+        ctx.restore();
+
+        // Draw eyes only once pipes are nearly fully grown, then fade them in
+        if (ease > 0.85) {
+            const eyeAlpha = (ease - 0.85) / 0.15;
+            ctx.save();
+            ctx.globalAlpha = eyeAlpha;
+            for (const e of p.topEyes) {
+                drawEye(p.x + e.lx, e.y, blink);
+                drawEye(p.x + e.rx, e.y, blink);
+            }
+            for (const e of p.botEyes) {
+                drawEye(p.x + e.lx, p.botY + e.y, blink);
+                drawEye(p.x + e.rx, p.botY + e.y, blink);
+            }
+            ctx.restore();
         }
     };
 
@@ -327,7 +365,6 @@ export default function FlappyBird() {
         ctx.restore();
     };
 
-    // Updated HUD with dynamic score color based on pipe overlap
     const drawHUD = () => {
         const ctx = ctxRef.current;
         const scoreText = String(scoreRef.current);
@@ -335,20 +372,16 @@ export default function FlappyBird() {
         ctx.font = `bold ${fontSize}px 'IM Fell English', Georgia, serif`;
         ctx.textAlign = "center";
 
-        // Measure text to get bounding box
         const textMetrics = ctx.measureText(scoreText);
         const textWidth = textMetrics.width;
-        const textHeight = fontSize * 0.8; // approximate height
+        const textHeight = fontSize * 0.8;
         const textX = W / 2 - textWidth / 2;
-        const textY = 52; // baseline
+        const textY = 52;
         const textTop = textY - textHeight;
 
-        // Check overlap with any pipe
         let overlappingPipe = false;
         for (const pipe of pipesRef.current) {
-            // Top pipe rectangle
             const topPipeRect = { x: pipe.x, y: 0, w: PIPE_W, h: pipe.topH };
-            // Bottom pipe rectangle
             const bottomPipeRect = { x: pipe.x, y: pipe.botY, w: PIPE_W, h: GROUND_Y - pipe.botY };
 
             const rectIntersect = (r1, r2) => {
@@ -365,7 +398,6 @@ export default function FlappyBird() {
             }
         }
 
-        // Choose color: white over black pipes, black elsewhere
         ctx.fillStyle = overlappingPipe ? "#ffffff" : "#1a1a1a";
         ctx.fillText(scoreText, W / 2, 52);
         ctx.textAlign = "left";
@@ -426,6 +458,10 @@ export default function FlappyBird() {
 
             for (const p of pipesRef.current) {
                 p.x -= SPEED;
+                // Advance spawn animation
+                if (p.spawnProgress < 1) {
+                    p.spawnProgress = Math.min(1, p.spawnProgress + 1 / SPAWN_FRAMES);
+                }
                 if (!p.passed && p.x + PIPE_W < BIRD_X) {
                     p.passed = true;
                     scoreRef.current++;
@@ -435,7 +471,7 @@ export default function FlappyBird() {
             if (pipesRef.current.length && pipesRef.current[0].x + PIPE_W < 0) {
                 pipesRef.current.shift();
                 const last = pipesRef.current[pipesRef.current.length - 1];
-                spawnPipe(last.x + PIPE_SPACING);
+                spawnPipe(last.x + PIPE_SPACING); // new pipes always animate in
             }
 
             const hit = checkCollision();
@@ -525,7 +561,7 @@ export default function FlappyBird() {
                     variants={stagger}
                     initial="hidden"
                     animate="show"
-                    className="flex flex-col items-start" // Left-aligned on all screens
+                    className="flex flex-col items-start"
                 >
                     <motion.div variants={fadeUp} className="w-full">
                         <SectionLabel>⌂ play</SectionLabel>
@@ -552,7 +588,6 @@ export default function FlappyBird() {
                                 />
                             </div>
                         </SketchCard>
-                        {/* TapeStrip hidden on mobile for cleaner layout */}
                         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10 hidden sm:block">
                             <TapeStrip color="#d4c9e8">TAP / SPACE</TapeStrip>
                         </div>
@@ -560,22 +595,19 @@ export default function FlappyBird() {
                 </motion.div>
             </div>
 
-            <style jsx>{`
+            {/* Fixed: removed 'jsx' attribute */}
+            <style>{`
                 .flappy-canvas {
                     cursor: crosshair;
                     touch-action: manipulation;
                 }
-                // Pulsing effect on the canvas to indicate interactivity
-                // .flappy-canvas:active {
-                //     transform: scale(0.99);
-                //     transition: transform 0.05s ease;
-                // }
                 @media (max-width: 640px) {
                     .flappy-canvas {
                         border-width: 1px;
                     }
                 }
             `}</style>
+
             <link
                 href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Space+Mono:wght@400;700&display=swap"
                 rel="stylesheet"

@@ -9,7 +9,7 @@ export default function Crosshatch({ className = "", label = "[ asset ]" }) {
                 backgroundColor: "#e8e4d9",
             }}
         >
-            <span className="font-mono text-[0.6rem] text-smudge tracking-widest">{label}</span>
+            <span className="font-mono text-[0.6rem] text-void tracking-widest">{label}</span>
         </div>
     );
 }

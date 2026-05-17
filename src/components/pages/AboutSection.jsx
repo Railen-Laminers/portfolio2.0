@@ -75,13 +75,10 @@ export default function AboutSection() {
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
-                        <p className="font-display italic text-[0.82rem] text-smudge text-right">
-                            ...i remember this.
-                        </p>
                         <SketchCard rotate={1.2} accent="#c8d9c4" className="mt-2">
                             <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">NOTE TO SELF /</p>
                             <p className="font-serif italic text-[0.9rem] text-void leading-relaxed">
-                                Start small. Improve every version.
+                                ...Start small. Improve every version.
                             </p>
                         </SketchCard>
                     </motion.div>
@@ -99,7 +96,7 @@ export default function AboutSection() {
                     {[
                         { label: "TOOLS", items: ["VS Code", "..."] },
                         { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "..."] },
-                        { label: "INTERESTS", items: ["Gaming", "Drawing", "Coding", "Reading", "..."] },
+                        { label: "INTERESTS", items: ["Gaming", "Coding", "Reading", "..."] },
                         { label: "CURRENTLY", items: ["learning —", "making —", "..."] },
                     ].map((col, i) => (
                         <motion.div key={i} variants={fadeUp}>
