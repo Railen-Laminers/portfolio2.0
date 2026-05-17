@@ -5,7 +5,7 @@ import SectionLabel from "../common/SectionLabel";
 import SketchCard from "../common/SketchCard";
 import DashedRule from "../common/DashedRule";
 import TapeStrip from "../common/TapeStrip";
-import Crosshatch from "../common/Crosshatch";  // <-- added import
+import Crosshatch from "../common/Crosshatch";
 
 export default function MiniGamesSection() {
     const navigate = useNavigate();
@@ -17,15 +17,14 @@ export default function MiniGamesSection() {
             description: "avoid the pipes. how far can you go?",
             accent: "#c8d9c4",
             rotate: -0.5,
-            // glyph: "🐦",  // removed
         },
     ];
 
     return (
         <motion.div
             variants={dreamCut}
-            initial="initial"
-            animate="animate"
+            initial="hidden"    // changed from "initial"
+            animate="show"      // changed from "animate"
             exit="exit"
             className="min-h-screen pt-14"
         >
@@ -59,11 +58,9 @@ export default function MiniGamesSection() {
                                 className="w-full text-left focus:outline-none focus:ring-2 focus:ring-fog"
                             >
                                 <SketchCard rotate={game.rotate} accent={game.accent}>
-                                    {/* replaced emoji/glyph with Crosshatch */}
-                                    <Crosshatch
-                                        className="w-full aspect-[4/3] mb-5"
-                                        label="[ play ]"
-                                    />
+                                    <Crosshatch className="w-full aspect-[4/3] mb-5">
+                                        [ play ]   {/* changed from label prop to children */}
+                                    </Crosshatch>
                                     <TapeStrip color={game.accent}>play now</TapeStrip>
                                     <h3 className="font-serif text-[1.1rem] text-ink mt-3 mb-1">
                                         {game.title}
@@ -81,12 +78,12 @@ export default function MiniGamesSection() {
 
                 <motion.div
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1, transition: { duration: 1 } }}
+                    whileInView={{ opacity: 1, transition: { duration: 0.6 } }}
                     viewport={{ once: true }}
-                    className="flex justify-start mt-12"
+                    className="flex justify-end mt-12"
                 >
-                    <SketchCard rotate={0.7} accent="#c8d9c4" className="max-w-xs">
-                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">NOTE /</p>
+                    <SketchCard rotate={-0.6} accent="#e8d4c8">
+                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
                         <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                             ...sometimes the best game is the one you invent yourself.
                         </p>

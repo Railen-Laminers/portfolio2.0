@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
 import SketchCard from "../common/SketchCard";
+// No DashedRule needed here (no bottom note)
 
 export default function ContactSection() {
     const [sent, setSent] = useState(false);
@@ -95,8 +96,10 @@ export default function ContactSection() {
                             ))}
                         </motion.div>
 
+                        {/* --- consistent sticky note (side placement) --- */}
                         <motion.div variants={fadeUp} className="mt-10">
-                            <SketchCard rotate={1.1} accent="#c4d4e8">
+                            <SketchCard rotate={-0.6} accent="#e8d4c8">
+                                <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
                                 <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm leading-relaxed">
                                     ...messages received in order of sincerity, not urgency.
                                 </p>
@@ -189,6 +192,8 @@ export default function ContactSection() {
                         </AnimatePresence>
                     </motion.div>
                 </div>
+
+                {/* no extra sticky note at bottom – only the side note */}
             </div>
         </motion.div>
     );

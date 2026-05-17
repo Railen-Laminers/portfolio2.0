@@ -75,8 +75,10 @@ export default function AboutSection() {
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
-                        <SketchCard rotate={1.2} accent="#c8d9c4" className="mt-2">
-                            <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">NOTE TO SELF /</p>
+
+                        {/* --- consistent sticky note (side placement) --- */}
+                        <SketchCard rotate={-0.6} accent="#e8d4c8" className="mt-2">
+                            <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
                             <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                                 ...Start small. Improve every version.
                             </p>
@@ -111,6 +113,8 @@ export default function AboutSection() {
                         </motion.div>
                     ))}
                 </motion.div>
+
+                {/* no extra sticky note at bottom – only the side note */}
             </div>
         </motion.div>
     );

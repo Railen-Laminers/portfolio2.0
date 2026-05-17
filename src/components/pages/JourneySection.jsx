@@ -16,7 +16,6 @@ export default function JourneySection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            // Removed bg-bone
             className="min-h-screen pt-14"
         >
             <div className="max-w-6xl mx-auto px-6 py-20">
@@ -97,12 +96,12 @@ export default function JourneySection() {
 
                 <motion.div
                     initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1, transition: { duration: 1 } }}
+                    whileInView={{ opacity: 1, transition: { duration: 0.6 } }}
                     viewport={{ once: true }}
-                    className="flex justify-end"
+                    className="flex justify-end mt-12"
                 >
-                    <SketchCard rotate={-0.8} accent="#e8cdd4" className="max-w-xs">
-                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">MARGIN NOTE /</p>
+                    <SketchCard rotate={-0.6} accent="#e8d4c8">   {/* updated rotate & accent */}
+                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>   {/* changed label */}
                         <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                             ...the further i go, the more the beginning makes sense.
                         </p>
