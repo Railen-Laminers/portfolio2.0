@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaGithub, FaCertificate } from "react-icons/fa";
 
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
@@ -12,6 +13,7 @@ import profileImg from "/profile.jpg";
 
 export default function AboutSection() {
     const [imgError, setImgError] = useState(false);
+    const navigate = useNavigate();
 
     return (
         <motion.div
@@ -63,9 +65,29 @@ export default function AboutSection() {
                                 Laguna
                             </p>
                         </motion.div>
+
+                        {/* certificates + github links */}
+                        <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mt-8">
+                            <button
+                                onClick={() => navigate("/certificates")}
+                                className="flex items-center gap-2 font-mono text-[0.6rem] tracking-widest text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                            >
+                                <FaCertificate className="text-[0.9rem]" />
+                                CERTIFICATES
+                            </button>
+                            <a
+                                href="https://github.com/Railen-Laminers"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 font-mono text-[0.6rem] tracking-widest text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                            >
+                                <FaGithub className="text-[0.9rem]" />
+                                GITHUB
+                            </a>
+                        </motion.div>
                     </div>
 
-                    {/* right column */}
+                    {/* right column – profile image + sticky note */}
                     <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center md:items-stretch">
                         <div className="relative max-w-[260px] mx-auto md:max-w-none w-full md:w-auto">
                             {!imgError ? (
@@ -86,17 +108,6 @@ export default function AboutSection() {
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
-                        {/* GitHub placeholder */}
-                        <motion.a
-                            variants={fadeUp}
-                            href="https://github.com/Railen-Laminers"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-2 border border-smudge px-3 py-2 font-mono text-[0.6rem] tracking-widest text-void opacity-80 hover:opacity-100 transition w-full max-w-[260px]"
-                        >
-                            <FaGithub className="text-[1rem]" />
-                            GITHUB
-                        </motion.a>
 
                         {/* sticky note */}
                         <SketchCard rotate={-0.6} accent="#e8d4c8" className="mt-2">

@@ -61,10 +61,29 @@ export default function JourneySection() {
                                     <div className="mb-2">
                                         <TapeStrip color={entry.accent}>{entry.tag}</TapeStrip>
                                     </div>
-                                    <button onClick={() => setExpanded(expanded === i ? null : i)} className="text-left w-full">
-                                        <h3 className="font-display italic text-ink text-[1.4rem] leading-snug mb-1 hover:opacity-70 transition-opacity">
-                                            {entry.title}
-                                        </h3>
+                                    <button
+                                        onClick={() => setExpanded(expanded === i ? null : i)}
+                                        className="text-left w-full group/btn"
+                                    >
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="font-display italic text-ink text-[1.4rem] leading-snug mb-1 group-hover/btn:opacity-70 transition-opacity">
+                                                {entry.title}
+                                            </h3>
+                                            <div className="shrink-0">
+                                                <svg
+                                                    className={`w-5 h-5 transition-all duration-300 ease-out text-smudge/60 group-hover/btn:text-smudge/90 ${expanded === i ? 'rotate-180' : ''}`}
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    aria-label={expanded === i ? "Collapse" : "Expand"}
+                                                >
+                                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                                </svg>
+                                            </div>
+                                        </div>
                                     </button>
                                     <AnimatePresence>
                                         {expanded === i && (
@@ -83,8 +102,10 @@ export default function JourneySection() {
                                             </motion.div>
                                         )}
                                     </AnimatePresence>
-                                    {expanded !== i && (
-                                        <p className="font-serif italic text-[0.85rem] text-void">{entry.note || "click to read →"}</p>
+                                    {expanded !== i && !entry.note && (
+                                        <p className="font-display italic text-[0.75rem] text-smudge/70 tracking-wide">
+                                            click to read →
+                                        </p>
                                     )}
                                 </div>
                             </motion.div>
@@ -100,8 +121,8 @@ export default function JourneySection() {
                     viewport={{ once: true }}
                     className="flex justify-end mt-12"
                 >
-                    <SketchCard rotate={-0.6} accent="#e8d4c8">   {/* updated rotate & accent */}
-                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>   {/* changed label */}
+                    <SketchCard rotate={-0.6} accent="#e8d4c8">
+                        <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
                         <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                             ...the further i go, the more the beginning makes sense.
                         </p>

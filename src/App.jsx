@@ -1,3 +1,4 @@
+// App.jsx (modified)
 import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -7,6 +8,7 @@ import ProjectsSection from "./components/pages/ProjectsSection";
 import JourneySection from "./components/pages/JourneySection";
 import ContactSection from "./components/pages/ContactSection";
 import MiniGamesSection from "./components/pages/MiniGamesSection";
+import CertificatesSection from "./components/pages/CertificatesSection"; // <-- import
 import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
 
@@ -20,7 +22,6 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen bg-bone overflow-hidden">
-      {/* Global notebook grid lines – use CSS variable for colour */}
       <div
         className="absolute inset-0 pointer-events-none opacity-30"
         style={{
@@ -28,10 +29,8 @@ export default function App() {
             "repeating-linear-gradient(0deg, transparent, transparent 27px, var(--smudge) 27px, var(--smudge) 28px)",
         }}
       />
-      {/* Global left margin rule – only visible on desktop screens (≥1024px) */}
       <div className="absolute top-0 bottom-0 left-[72px] w-px bg-blush opacity-60 hidden lg:block" />
 
-      {/* Foreground content */}
       <div className="relative z-10">
         {!isHome && <Navigation />}
 
@@ -44,6 +43,7 @@ export default function App() {
             <Route path="/contact" element={<ContactSection />} />
             <Route path="/minigames" element={<MiniGamesSection />} />
             <Route path="/minigames/flappybird" element={<FlappyBird />} />
+            <Route path="/certificates" element={<CertificatesSection />} /> {/* <-- new route */}
           </Routes>
         </AnimatePresence>
 

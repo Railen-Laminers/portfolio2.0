@@ -1,4 +1,4 @@
-export default function Crosshatch({ className = "", label = "[ asset ]" }) {
+export default function Crosshatch({ className = "", label = "[ image ]" }) {
     return (
         <div
             className={`flex items-center justify-center ${className}`}
