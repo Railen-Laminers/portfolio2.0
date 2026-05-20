@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { FaGithub } from "react-icons/fa";
+
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
@@ -45,13 +47,21 @@ export default function AboutSection() {
                         <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10">
                             {["DEVELOPER", "SOMETHING ELSE"].map((tag, i) => {
                                 const colors = ["#d4c9e8", "#c8d9c4", "#e8cdd4"];
-                                return <TapeStrip key={i} color={colors[i]}>{tag}</TapeStrip>;
+                                return (
+                                    <TapeStrip key={i} color={colors[i]}>
+                                        {tag}
+                                    </TapeStrip>
+                                );
                             })}
                         </motion.div>
 
                         <motion.div variants={fadeUp} className="border-l-2 border-smudge pl-5">
-                            <p className="font-mono text-[0.6rem] text-void tracking-widest mb-1">CURRENTLY LOCATED IN</p>
-                            <p className="font-serif italic text-void text-[1rem]">Laguna</p>
+                            <p className="font-mono text-[0.6rem] text-void tracking-widest mb-1">
+                                CURRENTLY LOCATED IN
+                            </p>
+                            <p className="font-serif italic text-void text-[1rem]">
+                                Laguna
+                            </p>
                         </motion.div>
                     </div>
 
@@ -72,13 +82,27 @@ export default function AboutSection() {
                                     label="[ portrait unavailable ]"
                                 />
                             )}
+
                             <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-16 h-3 bg-[#d4c9e8] opacity-70 rotate-[-1deg]" />
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
+                        {/* GitHub placeholder */}
+                        <motion.a
+                            variants={fadeUp}
+                            href="https://github.com/Railen-Laminers"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-2 border border-smudge px-3 py-2 font-mono text-[0.6rem] tracking-widest text-void opacity-80 hover:opacity-100 transition w-full max-w-[260px]"
+                        >
+                            <FaGithub className="text-[1rem]" />
+                            GITHUB
+                        </motion.a>
 
-                        {/* --- consistent sticky note (side placement) --- */}
+                        {/* sticky note */}
                         <SketchCard rotate={-0.6} accent="#e8d4c8" className="mt-2">
-                            <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
+                            <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">
+                                STICKY NOTE /
+                            </p>
                             <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
                                 ...Start small. Improve every version.
                             </p>
@@ -97,7 +121,7 @@ export default function AboutSection() {
                 >
                     {[
                         { label: "TOOLS", items: ["VS Code", "..."] },
-                        { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "..."] },
+                        { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "Python", "..."] },
                         { label: "INTERESTS", items: ["Gaming", "Coding", "Reading", "..."] },
                         { label: "CURRENTLY", items: ["learning —", "making —", "..."] },
                     ].map((col, i) => (
@@ -105,7 +129,10 @@ export default function AboutSection() {
                             <SectionLabel>{col.label}</SectionLabel>
                             <ul className="space-y-1">
                                 {col.items.map((item, j) => (
-                                    <li key={j} className="font-serif text-[0.9rem] text-void leading-relaxed">
+                                    <li
+                                        key={j}
+                                        className="font-serif text-[0.9rem] text-void leading-relaxed"
+                                    >
                                         {item}
                                     </li>
                                 ))}
@@ -113,8 +140,6 @@ export default function AboutSection() {
                         </motion.div>
                     ))}
                 </motion.div>
-
-                {/* no extra sticky note at bottom – only the side note */}
             </div>
         </motion.div>
     );
