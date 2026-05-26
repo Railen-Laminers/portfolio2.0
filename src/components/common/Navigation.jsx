@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import { NAV } from "../../data/navData";
 
-// ── OMORI Eye Icon Components (unchanged) ───────────────────────────────────
+// ── OMORI Eye Icon Components ─────────────────────────────────────────────
 
 function EyeOpen({ size = 28 }) {
     return (
@@ -50,26 +50,105 @@ function EyeClosed({ size = 28 }) {
     );
 }
 
-// ── Dark Mode Toggle Button (now uses theme from context) ───────────────────
+// ── Crimson Eye: open eye with blood tears dripping from it ───────────────
 
-function DarkModeToggle({ isDark, onToggle }) {
+function EyeCrimson({ size = 28 }) {
+    return (
+        <svg
+            width={size}
+            height={size * 1.1}
+            viewBox="0 0 64 60"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            className="block"
+        >
+            {/* Eyelashes top */}
+            <line x1="22" y1="8" x2="20" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <line x1="32" y1="6" x2="32" y2="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <line x1="42" y1="8" x2="44" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+
+            {/* Eye shape */}
+            <path d="M5 23 C13 11 51 11 59 23 C51 35 13 35 5 23 Z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+
+            {/* Iris */}
+            <circle cx="32" cy="23" r="10" fill="currentColor" />
+            <circle cx="32" cy="23" r="4" fill="currentColor" />
+            <circle cx="36" cy="19" r="1.5" fill="#f0dfdf" opacity="0.6" />
+            <circle cx="28" cy="27" r="1" fill="#f0dfdf" opacity="0.4" />
+
+            {/* Eyelashes bottom */}
+            <line x1="20" y1="34" x2="18" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <line x1="32" y1="36" x2="32" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <line x1="44" y1="34" x2="46" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+
+            {/* Blood tears — sketchy crimson drips */}
+            <path
+                d="M24 34 Q23.5 39 24.5 43 Q25 46 24 50"
+                fill="none"
+                stroke="#c0393a"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                opacity="0.9"
+            />
+            <ellipse cx="24" cy="51" rx="2" ry="2.8" fill="#c0393a" opacity="0.85" />
+
+            <path
+                d="M32 36 Q31.5 41 32.5 46 Q33 49 32.2 54"
+                fill="none"
+                stroke="#c0393a"
+                strokeWidth="2"
+                strokeLinecap="round"
+                opacity="0.85"
+            />
+            <ellipse cx="32.2" cy="55.5" rx="1.8" ry="2.5" fill="#c0393a" opacity="0.8" />
+
+            {/* Small accent drip */}
+            <path
+                d="M40 33 Q39.8 36 40.5 38"
+                fill="none"
+                stroke="#c0393a"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                opacity="0.6"
+            />
+            <ellipse cx="40.5" cy="39.2" rx="1.2" ry="1.6" fill="#c0393a" opacity="0.55" />
+        </svg>
+    );
+}
+
+// ── Dark Mode Toggle Button ───────────────────────────────────────────────
+
+function DarkModeToggle({ isDark, isCrimson, onToggle }) {
     return (
         <button
             onClick={onToggle}
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            title={isDark ? "dark mode" : "light mode"}
+            aria-label={
+                isCrimson
+                    ? "Deactivate crimson mode"
+                    : isDark
+                        ? "Switch to light mode"
+                        : "Switch to dark mode"
+            }
+            title={isCrimson ? "crimson mode (click to exit)" : isDark ? "dark mode" : "light mode"}
             className="flex items-center group transition-opacity hover:opacity-60 bg-none border-none cursor-pointer p-[2px_4px]"
         >
             <span
-                className={`transition-all duration-300 text-ink ${isDark ? "translate-y-px" : "translate-y-0"}`}
+                className={`transition-all duration-300 text-ink ${isCrimson ? "animate-crimson-pulse" : isDark ? "translate-y-px" : "translate-y-0"
+                    }`}
             >
-                {isDark ? <EyeClosed size={26} /> : <EyeOpen size={26} />}
+                {isCrimson ? (
+                    <EyeCrimson size={26} />
+                ) : isDark ? (
+                    <EyeClosed size={26} />
+                ) : (
+                    <EyeOpen size={26} />
+                )}
             </span>
         </button>
     );
 }
 
-// ── Reusable Navigation Link (unchanged) ────────────────────────────────────
+// ── Reusable Navigation Link ──────────────────────────────────────────────
 
 function NavLink({ item, isActive, onClick, mobile = false }) {
     const baseClasses = mobile
@@ -99,13 +178,13 @@ function NavLink({ item, isActive, onClick, mobile = false }) {
     );
 }
 
-// ── Navigation Component (UPDATED) ──────────────────────────────────────────
+// ── Navigation Component ──────────────────────────────────────────────────
 
 export default function Navigation() {
     const navigate = useNavigate();
     const location = useLocation();
-    const { theme, toggleTheme } = useTheme();   // 👈 use global theme
-    const isDark = theme === 'dark';
+    const { theme, toggleTheme, crimsonMode } = useTheme();
+    const isDark = theme === "dark";
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const closeMenu = useCallback(() => setIsMenuOpen(false), []);
@@ -154,7 +233,7 @@ export default function Navigation() {
                             {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
                         <span className="block w-px h-7 bg-smudge" />
-                        <DarkModeToggle isDark={isDark} onToggle={toggleTheme} />
+                        <DarkModeToggle isDark={isDark} isCrimson={crimsonMode} onToggle={toggleTheme} />
                     </div>
                 </nav>
             </div>
@@ -173,7 +252,7 @@ export default function Navigation() {
                             {String(currentIndex).padStart(2, "0")} / {String(totalPages).padStart(2, "0")}
                         </span>
                         <span className="w-px h-5 bg-smudge" />
-                        <DarkModeToggle isDark={isDark} onToggle={toggleTheme} />
+                        <DarkModeToggle isDark={isDark} isCrimson={crimsonMode} onToggle={toggleTheme} />
                         <span className="w-px h-5 bg-smudge" />
                         <button
                             onClick={toggleMenu}

@@ -39,6 +39,32 @@
     --sky: #4f688b;
 }
 
+/* ─── CRIMSON EASTER EGG ───────────────────────────────────────────────────── */
+.crimson {
+    --ink: #f0dfdf;
+    /* warm off-white text */
+    --void: #d4b8b8;
+    /* muted rose text */
+    --fog: #a07878;
+    /* mid crimson-grey */
+    --smudge: #6a3a3a;
+    /* dull crimson border */
+    --ash: #3a1f1f;
+    /* deep crimson surface */
+    --bone: #2a1414;
+    /* darkest bg layer */
+    --paper: #321818;
+    /* card/nav bg */
+    --lav: #7a2a2a;
+    /* accent (replaces lavender) */
+    --blush: #8b3030;
+    /* accent (replaces blush) */
+    --sage: #5a2828;
+    /* accent (replaces sage) */
+    --sky: #6b3535;
+    /* accent (replaces sky) */
+}
+
 /* Smooth transitions for colour changes – unified */
 *,
 *::before,
@@ -173,3 +199,7 @@ label {
         transition-duration: 0.01ms !important;
     }
 }
+
+
+
+/* Crimson Mode */
