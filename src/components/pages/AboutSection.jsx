@@ -131,8 +131,8 @@ export default function AboutSection() {
                     className="grid grid-cols-2 md:grid-cols-4 gap-6"
                 >
                     {[
-                        { label: "TOOLS", items: ["VS Code", "..."] },
                         { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "Python", "..."] },
+                        { label: "FRAMEWORKS", items: ["Express", "React", "Node.js", "Laravel", "..."] },
                         { label: "INTERESTS", items: ["Gaming", "Coding", "Reading", "..."] },
                         { label: "CURRENTLY", items: ["learning —", "making —", "..."] },
                     ].map((col, i) => (
