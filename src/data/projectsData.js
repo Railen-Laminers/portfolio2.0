@@ -48,16 +48,6 @@ export const PROJECTS = [
         image: ydImg,
     },
     {
-        title: "Platforming Game",
-        year: "2025",
-        tag: "ONGOING",
-        accent: "#d4c9e8",
-        rotate: -0.5,   // moderate left tilt
-        desc: "A 2D platformer game built with Godot Engine, featuring smooth controls, engaging levels, and a charming art style.",
-        link: "https://railen-laminers.github.io/PlatformingGodotGame",
-        image: platformingImg,
-    },
-    {
         title: "Untitled Project",
         year: "2025",
         tag: "ONGOING",

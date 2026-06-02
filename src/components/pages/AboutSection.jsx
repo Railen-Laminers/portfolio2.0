@@ -9,7 +9,7 @@ import TapeStrip from "../common/TapeStrip";
 import Crosshatch from "../common/Crosshatch";
 import SketchCard from "../common/SketchCard";
 import DashedRule from "../common/DashedRule";
-import profileImg from "/profile.jpg";
+import profileImg from "/profile.png";
 
 export default function AboutSection() {
     const [imgError, setImgError] = useState(false);
