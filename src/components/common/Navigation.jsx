@@ -1,4 +1,3 @@
-// src/components/common/Navigation.jsx
 import { useState, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
@@ -62,26 +61,17 @@ function EyeCrimson({ size = 28 }) {
             aria-hidden="true"
             className="block"
         >
-            {/* Eyelashes top */}
             <line x1="22" y1="8" x2="20" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="32" y1="6" x2="32" y2="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="42" y1="8" x2="44" y2="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-
-            {/* Eye shape */}
             <path d="M5 23 C13 11 51 11 59 23 C51 35 13 35 5 23 Z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-
-            {/* Iris */}
             <circle cx="32" cy="23" r="10" fill="currentColor" />
             <circle cx="32" cy="23" r="4" fill="currentColor" />
             <circle cx="36" cy="19" r="1.5" fill="#f0dfdf" opacity="0.6" />
             <circle cx="28" cy="27" r="1" fill="#f0dfdf" opacity="0.4" />
-
-            {/* Eyelashes bottom */}
             <line x1="20" y1="34" x2="18" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="32" y1="36" x2="32" y2="42" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             <line x1="44" y1="34" x2="46" y2="40" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-
-            {/* Blood tears — sketchy crimson drips */}
             <path
                 d="M24 34 Q23.5 39 24.5 43 Q25 46 24 50"
                 fill="none"
@@ -91,7 +81,6 @@ function EyeCrimson({ size = 28 }) {
                 opacity="0.9"
             />
             <ellipse cx="24" cy="51" rx="2" ry="2.8" fill="#c0393a" opacity="0.85" />
-
             <path
                 d="M32 36 Q31.5 41 32.5 46 Q33 49 32.2 54"
                 fill="none"
@@ -101,8 +90,6 @@ function EyeCrimson({ size = 28 }) {
                 opacity="0.85"
             />
             <ellipse cx="32.2" cy="55.5" rx="1.8" ry="2.5" fill="#c0393a" opacity="0.8" />
-
-            {/* Small accent drip */}
             <path
                 d="M40 33 Q39.8 36 40.5 38"
                 fill="none"

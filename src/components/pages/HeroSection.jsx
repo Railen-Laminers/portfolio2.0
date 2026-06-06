@@ -9,7 +9,6 @@ export default function HeroSection() {
     const navigate = useNavigate();
     const { theme, crimsonMode } = useTheme();
 
-    // Natural, low‑contrast adjustments – identical base for dark and crimson
     const imageFilter = crimsonMode
         ? "brightness(0.85) contrast(0.9) saturate(0.75) sepia(0.15) hue-rotate(-5deg)"
         : theme === "dark"
@@ -22,50 +21,55 @@ export default function HeroSection() {
             initial="initial"
             animate="animate"
             exit="exit"
-            className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
+            className="relative h-screen w-screen overflow-hidden"
         >
-            {/* Hero profile image – centred, touching the bottom */}
+            {/* Background Profile Image (perfectly centered) */}
             <img
                 src={profileImg}
                 alt="Hero Profile"
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 h-screen w-auto object-contain z-0"
+                className="
+                    absolute
+                    top-1/2 left-1/2
+                    -translate-x-1/2
+                    -translate-y-1/2
+                    h-full
+                    w-auto
+                    max-w-none
+                    object-contain
+                    z-0
+                "
                 style={{ filter: imageFilter }}
             />
 
+            {/* Hero Content */}
             <motion.div
                 variants={stagger}
                 initial="hidden"
                 animate="show"
-                className="relative z-10 text-center px-6 max-w-3xl"
+                className="relative z-10 flex flex-col justify-between h-screen px-6 py-10"
             >
+                {/* Top */}
                 <motion.p
                     variants={fadeUp}
-                    className="font-mono text-[0.62rem] text-void tracking-[0.2em] mb-6 uppercase"
+                    className="font-mono text-[0.62rem] text-void tracking-[0.2em] uppercase text-center"
                 >
-                    ◈ portfolio 2.0
+                    ◈ Portfolio 2.0
                 </motion.p>
 
-                <motion.h1
+                {/* Bottom Navigation */}
+                <motion.div
                     variants={fadeUp}
-                    className="font-display italic text-ink leading-[1.08] mb-8"
-                    style={{ fontSize: "clamp(3.5rem, 9vw, 7.5rem)" }}
+                    className="flex flex-wrap justify-center gap-3"
                 >
-                    Railen
-                </motion.h1>
-
-                <motion.p
-                    variants={fadeUp}
-                    className="font-serif italic text-void text-[1.05rem] mb-12 max-w-sm mx-auto leading-relaxed"
-                >
-                    ...a portfolio. a sketchbook. a place that became real by being looked at.
-                </motion.p>
-
-                <motion.div variants={fadeUp} className="flex flex-wrap gap-3 justify-center">
                     {NAV.map((item) => (
                         <button
                             key={item.id}
                             onClick={() => navigate(`/${item.id}`)}
-                            className="font-mono text-[0.62rem] tracking-[0.12em] text-void border border-smudge px-5 py-2.5 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                            className={`font-mono text-[0.62rem] tracking-[0.12em] px-5 py-2.5 rounded-[1px] border transition-all duration-300 ${
+                                theme === "light"
+                                    ? "bg-ink text-paper border-ink hover:bg-paper hover:text-ink"
+                                    : "bg-paper text-ink border-smudge hover:bg-ink hover:text-bone hover:border-ink"
+                            }`}
                         >
                             {item.glyph} {item.label.toUpperCase()}
                         </button>

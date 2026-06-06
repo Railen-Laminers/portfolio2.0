@@ -1,4 +1,3 @@
-// App.jsx (modified)
 import { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
@@ -8,7 +7,7 @@ import ProjectsSection from "./components/pages/ProjectsSection";
 import JourneySection from "./components/pages/JourneySection";
 import ContactSection from "./components/pages/ContactSection";
 import MiniGamesSection from "./components/pages/MiniGamesSection";
-import CertificatesSection from "./components/pages/CertificatesSection"; // <-- import
+import CertificatesSection from "./components/pages/CertificatesSection";
 import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
 
@@ -43,7 +42,7 @@ export default function App() {
             <Route path="/contact" element={<ContactSection />} />
             <Route path="/minigames" element={<MiniGamesSection />} />
             <Route path="/minigames/flappybird" element={<FlappyBird />} />
-            <Route path="/certificates" element={<CertificatesSection />} /> {/* <-- new route */}
+            <Route path="/certificates" element={<CertificatesSection />} />
           </Routes>
         </AnimatePresence>
 

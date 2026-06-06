@@ -1,5 +1,5 @@
-// src/components/pages/MiniGamesSection.jsx
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";               // ← added for internal routing
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import { MINIGAMES, MINIGAME_FILTERS } from "../../data/minigamesData";
@@ -78,12 +78,14 @@ function GameModal({ game, onClose }) {
                                     {buttonText}
                                 </a>
                             ) : (
-                                <a
-                                    href={game.link}
+                                // ✅ FIX: use Link for internal routes
+                                <Link
+                                    to={game.link}
+                                    onClick={onClose}
                                     className="font-mono text-[0.62rem] tracking-[0.12em] text-void border border-smudge px-5 py-2.5 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px] inline-block"
                                 >
                                     {buttonText}
-                                </a>
+                                </Link>
                             )
                         ) : (
                             <span className="font-mono text-[0.62rem] tracking-[0.12em] text-void/40 border border-smudge/40 px-5 py-2.5 rounded-[1px] inline-block cursor-default">
