@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, memo } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import HeroSection from "./components/pages/HeroSection";
@@ -10,6 +10,30 @@ import MiniGamesSection from "./components/pages/MiniGamesSection";
 import CertificatesSection from "./components/pages/CertificatesSection";
 import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
+import PageWrapper from "./components/common/PageWrapper";
+
+// Memoized background component – stays fixed and never re‑renders during navigation
+const NotebookBackground = memo(() => {
+  const lineStyle = useMemo(
+    () => ({
+      backgroundImage:
+        "repeating-linear-gradient(0deg, transparent, transparent 27px, var(--smudge) 27px, var(--smudge) 28px)",
+    }),
+    []
+  );
+
+  return (
+    <>
+      {/* Horizontal ruled lines – fixed to viewport */}
+      <div
+        className="fixed inset-0 pointer-events-none opacity-30 z-0"
+        style={lineStyle}
+      />
+      {/* Vertical margin line – fixed to viewport */}
+      <div className="fixed top-0 bottom-0 left-[72px] w-px bg-blush opacity-60 hidden lg:block z-0" />
+    </>
+  );
+});
 
 export default function App() {
   const location = useLocation();
@@ -20,29 +44,79 @@ export default function App() {
   }, [location.pathname]);
 
   return (
-    <div className="relative min-h-screen bg-bone overflow-hidden">
-      <div
-        className="absolute inset-0 pointer-events-none opacity-30"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 27px, var(--smudge) 27px, var(--smudge) 28px)",
-        }}
-      />
-      <div className="absolute top-0 bottom-0 left-[72px] w-px bg-blush opacity-60 hidden lg:block" />
+    <div className="relative min-h-screen bg-bone">
+      {/* Notebook background – now completely independent of routing & animations */}
+      <NotebookBackground />
 
       <div className="relative z-10">
         {!isHome && <Navigation />}
 
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="wait" custom={location.pathname}>
           <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<HeroSection />} />
-            <Route path="/about" element={<AboutSection />} />
-            <Route path="/projects" element={<ProjectsSection />} />
-            <Route path="/journey" element={<JourneySection />} />
-            <Route path="/contact" element={<ContactSection />} />
-            <Route path="/minigames" element={<MiniGamesSection />} />
-            <Route path="/minigames/flappybird" element={<FlappyBird />} />
-            <Route path="/certificates" element={<CertificatesSection />} />
+            <Route
+              path="/"
+              element={
+                <PageWrapper>
+                  <HeroSection />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <PageWrapper>
+                  <AboutSection />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <PageWrapper>
+                  <ProjectsSection />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/journey"
+              element={
+                <PageWrapper>
+                  <JourneySection />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageWrapper>
+                  <ContactSection />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/minigames"
+              element={
+                <PageWrapper>
+                  <MiniGamesSection />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/minigames/flappybird"
+              element={
+                <PageWrapper>
+                  <FlappyBird />
+                </PageWrapper>
+              }
+            />
+            <Route
+              path="/certificates"
+              element={
+                <PageWrapper>
+                  <CertificatesSection />
+                </PageWrapper>
+              }
+            />
           </Routes>
         </AnimatePresence>
 
