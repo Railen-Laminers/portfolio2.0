@@ -10,7 +10,7 @@ import MiniGamesSection from "./components/pages/MiniGamesSection";
 import CertificatesSection from "./components/pages/CertificatesSection";
 import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
-import PageWrapper from "./components/common/PageWrapper";
+
 
 // Memoized background component – stays fixed and never re‑renders during navigation
 const NotebookBackground = memo(() => {
@@ -55,68 +55,15 @@ export default function App() {
           <Routes location={location} key={location.pathname}>
             <Route
               path="/"
-              element={
-                <PageWrapper>
-                  <HeroSection />
-                </PageWrapper>
-              }
+              element={<HeroSection />}
             />
-            <Route
-              path="/about"
-              element={
-                <PageWrapper>
-                  <AboutSection />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/projects"
-              element={
-                <PageWrapper>
-                  <ProjectsSection />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/journey"
-              element={
-                <PageWrapper>
-                  <JourneySection />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/contact"
-              element={
-                <PageWrapper>
-                  <ContactSection />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/minigames"
-              element={
-                <PageWrapper>
-                  <MiniGamesSection />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/minigames/flappybird"
-              element={
-                <PageWrapper>
-                  <FlappyBird />
-                </PageWrapper>
-              }
-            />
-            <Route
-              path="/certificates"
-              element={
-                <PageWrapper>
-                  <CertificatesSection />
-                </PageWrapper>
-              }
-            />
+            <Route path="/about" element={<AboutSection />} />
+            <Route path="/projects" element={<ProjectsSection />} />
+            <Route path="/journey" element={<JourneySection />} />
+            <Route path="/contact" element={<ContactSection />} />
+            <Route path="/minigames" element={<MiniGamesSection />} />
+            <Route path="/minigames/flappybird" element={<FlappyBird />} />
+            <Route path="/certificates" element={<CertificatesSection />} />
           </Routes>
         </AnimatePresence>
 
