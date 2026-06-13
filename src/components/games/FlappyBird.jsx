@@ -564,7 +564,7 @@ export default function FlappyBird() {
                     className="flex flex-col items-start"
                 >
                     <motion.div variants={fadeUp} className="w-full">
-                        <SectionLabel>⌂ play</SectionLabel>
+                        <SectionLabel>△ play</SectionLabel>
                         <h2
                             className="font-display italic text-ink leading-[1.1] mb-3"
                             style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}

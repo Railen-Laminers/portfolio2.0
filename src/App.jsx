@@ -4,7 +4,6 @@ import { AnimatePresence } from "framer-motion";
 import HeroSection from "./components/pages/HeroSection";
 import AboutSection from "./components/pages/AboutSection";
 import ProjectsSection from "./components/pages/ProjectsSection";
-import JourneySection from "./components/pages/JourneySection";
 import ContactSection from "./components/pages/ContactSection";
 import MiniGamesSection from "./components/pages/MiniGamesSection";
 import CertificatesSection from "./components/pages/CertificatesSection";
@@ -59,7 +58,6 @@ export default function App() {
             />
             <Route path="/about" element={<AboutSection />} />
             <Route path="/projects" element={<ProjectsSection />} />
-            <Route path="/journey" element={<JourneySection />} />
             <Route path="/contact" element={<ContactSection />} />
             <Route path="/minigames" element={<MiniGamesSection />} />
             <Route path="/minigames/flappybird" element={<FlappyBird />} />

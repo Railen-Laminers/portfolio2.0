@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaGithub, FaCertificate } from "react-icons/fa";
+import { FaGithub, FaFacebook, FaFileAlt } from "react-icons/fa";
 
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
@@ -66,23 +66,35 @@ export default function AboutSection() {
                             </p>
                         </motion.div>
 
-                        {/* certificates + github links */}
+                        {/* icon-only links with tooltips */}
                         <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mt-8">
                             <button
                                 onClick={() => navigate("/certificates")}
-                                className="flex items-center gap-2 font-mono text-[0.6rem] tracking-widest text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                title="View Certificates"
+                                aria-label="Certificates"
                             >
-                                <FaCertificate className="text-[0.9rem]" />
-                                CERTIFICATES
+                                <FaFileAlt />
                             </button>
                             <a
                                 href="https://github.com/Railen-Laminers"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 font-mono text-[0.6rem] tracking-widest text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                title="GitHub Profile"
+                                aria-label="GitHub"
                             >
-                                <FaGithub className="text-[0.9rem]" />
-                                GITHUB
+                                <FaGithub />
+                            </a>
+                            <a
+                                href="https://facebook.com/railen"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                title="Facebook Profile"
+                                aria-label="Facebook"
+                            >
+                                <FaFacebook />
                             </a>
                         </motion.div>
                     </div>
@@ -133,8 +145,8 @@ export default function AboutSection() {
                     {[
                         { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "Python", "..."] },
                         { label: "FRAMEWORKS", items: ["Express", "React", "Node.js", "Laravel", "..."] },
+                        { label: "Database", items: ["MySQL", "Mongo", "Postgre", "..."] },
                         { label: "INTERESTS", items: ["Gaming", "Coding", "Reading", "..."] },
-                        { label: "CURRENTLY", items: ["learning —", "making —", "..."] },
                     ].map((col, i) => (
                         <motion.div key={i} variants={fadeUp}>
                             <SectionLabel>{col.label}</SectionLabel>

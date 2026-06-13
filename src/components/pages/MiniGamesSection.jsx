@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";               // ← added for internal routing
+import { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import { MINIGAMES, MINIGAME_FILTERS } from "../../data/minigamesData";
@@ -9,9 +10,21 @@ import Crosshatch from "../common/Crosshatch";
 import SketchCard from "../common/SketchCard";
 import DashedRule from "../common/DashedRule";
 
-function GameModal({ game, onClose }) {
-    const [imgError, setImgError] = useState(false);
+// ---------- Helper: detect if device supports hover (mouse) ----------
+function useHoverCapable() {
+  const [isHoverCapable, setIsHoverCapable] = useState(false);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const handleChange = (e) => setIsHoverCapable(e.matches);
+    setIsHoverCapable(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleChange);
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+  return isHoverCapable;
+}
 
+// ---------- Modal for mobile (matches tooltip layout, no image) ----------
+function GameModal({ game, onClose }) {
     useEffect(() => {
         const handleEscape = (e) => { if (e.key === "Escape") onClose(); };
         document.addEventListener("keydown", handleEscape);
@@ -40,7 +53,7 @@ function GameModal({ game, onClose }) {
                 exit={{ scale: 0.9, y: 20, opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+                className="relative max-w-[280px] w-full"
             >
                 <SketchCard rotate={0} accent={game.accent} className="p-0">
                     <button
@@ -50,23 +63,16 @@ function GameModal({ game, onClose }) {
                     >
                         ✕
                     </button>
-                    <div className="p-6 pb-2">
-                        {!imgError && game.image ? (
-                            <img
-                                src={game.image}
-                                alt={game.title}
-                                className="w-full rounded-[2px] border border-smudge shadow-md"
-                                onError={() => setImgError(true)}
-                            />
-                        ) : (
-                            <Crosshatch className="w-full aspect-[4/3]" label="[ play → ]" />
-                        )}
-                    </div>
-                    <div className="p-6 pt-2">
-                        <TapeStrip color={game.accent}>{game.tag}</TapeStrip>
-                        <h3 className="font-serif text-[1.4rem] text-ink mt-4 mb-1 leading-snug">{game.title}</h3>
-                        <p className="font-mono text-[0.6rem] text-void tracking-wider mb-3">{game.year}</p>
-                        <p className="font-serif italic text-[0.9rem] text-void leading-relaxed mb-5">{game.desc}</p>
+                    <div className="p-4">
+                        {/* Exact same layout and fonts as the desktop tooltip */}
+                        <div className="inline-block">
+                            <TapeStrip color={game.accent} className="font-mono text-[0.55rem] tracking-wider">{game.tag}</TapeStrip>
+                        </div>
+                        <h4 className="font-sans text-sm font-semibold text-ink mt-1 tracking-tight">{game.title}</h4>
+                        <p className="font-mono text-[0.55rem] text-void/60 mt-0.5">{game.year}</p>
+                        <p className="font-sans text-[0.7rem] text-void/80 mt-2 leading-relaxed whitespace-normal mb-4">{game.desc}</p>
+                        
+                        {/* Kept the link button so users can still play the game on mobile */}
                         {game.link ? (
                             isExternal ? (
                                 <a
@@ -78,7 +84,6 @@ function GameModal({ game, onClose }) {
                                     {buttonText}
                                 </a>
                             ) : (
-                                // ✅ FIX: use Link for internal routes
                                 <Link
                                     to={game.link}
                                     onClick={onClose}
@@ -99,7 +104,139 @@ function GameModal({ game, onClose }) {
     );
 }
 
-function MinimalGameCard({ game, onClick }) {
+// ---------- Desktop card with hover tooltip ----------
+function DesktopGameCard({ game }) {
+  const [imgError, setImgError] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [adjustedPos, setAdjustedPos] = useState({ x: 0, y: 0 });
+  const [mounted, setMounted] = useState(false);
+  const tooltipRef = useRef(null);
+  const showTimeout = useRef(null);
+  const navigate = useNavigate();
+
+  const isExternal = game.link?.startsWith("http");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!tooltipVisible) return;
+    
+    const updatePosition = () => {
+      if (!tooltipRef.current) return;
+      const tooltipRect = tooltipRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      let { x, y } = mousePos;
+      const offsetX = 16;
+      const offsetY = 16;
+      
+      if (x + offsetX + tooltipRect.width > viewportWidth - 8) {
+        x = x - tooltipRect.width - offsetX;
+      } else {
+        x = x + offsetX;
+      }
+      
+      if (y + offsetY + tooltipRect.height > viewportHeight - 8) {
+        y = viewportHeight - tooltipRect.height - 8;
+      } else {
+        y = y + offsetY;
+      }
+      
+      setAdjustedPos({ x, y });
+    };
+
+    const raf = requestAnimationFrame(updatePosition);
+    return () => cancelAnimationFrame(raf);
+  }, [mousePos, tooltipVisible]);
+
+  const handleMouseMove = (e) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+  
+  const handleMouseEnter = () => { 
+    showTimeout.current = setTimeout(() => setTooltipVisible(true), 150); 
+  };
+  
+  const handleMouseLeave = () => { 
+    if (showTimeout.current) clearTimeout(showTimeout.current); 
+    setTooltipVisible(false); 
+  };
+  
+  const handleClick = () => { 
+    if (game.link) {
+      if (isExternal) {
+        window.open(game.link, "_blank", "noopener noreferrer");
+      } else {
+        navigate(game.link); // Handles internal React Router navigation
+      }
+    }
+  };
+  
+  const handleKeyDown = (e) => { 
+    if (e.key === "Enter" || e.key === " ") { 
+      e.preventDefault(); 
+      handleClick(); 
+    } 
+  };
+
+  return (
+    <div
+      className="relative cursor-pointer focus:outline-none focus:ring-2 focus:ring-fog rounded-[2px]"
+      onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      role="button"
+      tabIndex={0}
+    >
+      <SketchCard rotate={game.rotate} accent={game.accent} className="group">
+        {!imgError && game.image ? (
+          <img
+            src={game.image}
+            alt={game.title}
+            className="w-full aspect-[4/3] object-cover rounded-[2px] border border-smudge transition-transform duration-300 group-hover:scale-[1.02]"
+            onError={() => setImgError(true)}
+            loading="lazy"
+          />
+        ) : (
+          <Crosshatch className="w-full aspect-[4/3]" label="[ play → ]" />
+        )}
+      </SketchCard>
+      
+      {mounted && createPortal(
+        <AnimatePresence>
+          {tooltipVisible && (
+            <motion.div
+              ref={tooltipRef}
+              initial={{ opacity: 0, scale: 0.92, y: -4 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: -2 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              style={{ position: "fixed", left: adjustedPos.x, top: adjustedPos.y, zIndex: 100, pointerEvents: "none" }}
+              className="bg-paper border border-smudge shadow-xl rounded-md p-3 max-w-[280px]"
+            >
+              <div className="inline-block">
+                <TapeStrip color={game.accent} className="font-mono text-[0.55rem] tracking-wider">{game.tag}</TapeStrip>
+              </div>
+              <h4 className="font-sans text-sm font-semibold text-ink mt-1 tracking-tight">{game.title}</h4>
+              <p className="font-mono text-[0.55rem] text-void/60 mt-0.5">{game.year}</p>
+              <p className="font-sans text-[0.7rem] text-void/80 mt-2 leading-relaxed whitespace-normal">{game.desc}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
+    </div>
+  );
+}
+
+// ---------- Mobile card (opens modal) ----------
+function MobileGameCard({ game, onClick }) {
     const [imgError, setImgError] = useState(false);
     const handleKeyDown = (e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -135,6 +272,7 @@ function MinimalGameCard({ game, onClick }) {
 export default function MiniGamesSection() {
     const [filter, setFilter] = useState("ALL");
     const [selectedGame, setSelectedGame] = useState(null);
+    const isHoverCapable = useHoverCapable();
     const filteredGames = filter === "ALL"
         ? MINIGAMES
         : MINIGAMES.filter((g) => g.tag === filter);
@@ -151,7 +289,7 @@ export default function MiniGamesSection() {
                 <div className="max-w-6xl mx-auto px-6 py-20">
                     <motion.div variants={stagger} initial="hidden" animate="show">
                         <motion.div variants={fadeUp}>
-                            <SectionLabel>⌂ mini games</SectionLabel>
+                            <SectionLabel>△ mini games</SectionLabel>
                             <h2
                                 className="font-display italic text-ink leading-[1.1] mb-3"
                                 style={{ fontSize: "clamp(2.2rem, 5vw, 4rem)" }}
@@ -189,7 +327,11 @@ export default function MiniGamesSection() {
                                     animate={{ opacity: 1, y: 0, transition: { delay: i * 0.07, duration: 0.5 } }}
                                     exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.25 } }}
                                 >
-                                    <MinimalGameCard game={game} onClick={() => setSelectedGame(game)} />
+                                    {isHoverCapable ? (
+                                        <DesktopGameCard game={game} />
+                                    ) : (
+                                        <MobileGameCard game={game} onClick={() => setSelectedGame(game)} />
+                                    )}
                                 </motion.div>
                             ))}
                         </AnimatePresence>
@@ -211,7 +353,7 @@ export default function MiniGamesSection() {
                 </div>
             </motion.div>
             <AnimatePresence>
-                {selectedGame && <GameModal game={selectedGame} onClose={() => setSelectedGame(null)} />}
+                {!isHoverCapable && selectedGame && <GameModal game={selectedGame} onClose={() => setSelectedGame(null)} />}
             </AnimatePresence>
         </>
     );
