@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
-import { PROJECTS, PROJECT_FILTERS } from "../../data/projectsData";
+import { PROJECTS } from "../../data/projectsData"; // PROJECT_FILTERS removed
 import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
 import Crosshatch from "../common/Crosshatch";
@@ -68,7 +68,7 @@ function ProjectModal({ project, onClose }) {
             <h4 className="font-sans text-sm font-semibold text-ink mt-1 tracking-tight">{project.title}</h4>
             <p className="font-mono text-[0.55rem] text-void/60 mt-0.5">{project.year}</p>
             <p className="font-sans text-[0.7rem] text-void/80 mt-2 leading-relaxed whitespace-normal mb-4">{project.desc}</p>
-            
+
             {/* Kept the link button so users can still view the project on mobile */}
             {project.link ? (
               <a
@@ -107,29 +107,29 @@ function DesktopCard({ project }) {
 
   useEffect(() => {
     if (!tooltipVisible) return;
-    
+
     const updatePosition = () => {
       if (!tooltipRef.current) return;
       const tooltipRect = tooltipRef.current.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      
+
       let { x, y } = mousePos;
       const offsetX = 16;
       const offsetY = 16;
-      
+
       if (x + offsetX + tooltipRect.width > viewportWidth - 8) {
         x = x - tooltipRect.width - offsetX;
       } else {
         x = x + offsetX;
       }
-      
+
       if (y + offsetY + tooltipRect.height > viewportHeight - 8) {
         y = viewportHeight - tooltipRect.height - 8;
       } else {
         y = y + offsetY;
       }
-      
+
       setAdjustedPos({ x, y });
     };
 
@@ -140,25 +140,25 @@ function DesktopCard({ project }) {
   const handleMouseMove = (e) => {
     setMousePos({ x: e.clientX, y: e.clientY });
   };
-  
-  const handleMouseEnter = () => { 
-    showTimeout.current = setTimeout(() => setTooltipVisible(true), 150); 
+
+  const handleMouseEnter = () => {
+    showTimeout.current = setTimeout(() => setTooltipVisible(true), 150);
   };
-  
-  const handleMouseLeave = () => { 
-    if (showTimeout.current) clearTimeout(showTimeout.current); 
-    setTooltipVisible(false); 
+
+  const handleMouseLeave = () => {
+    if (showTimeout.current) clearTimeout(showTimeout.current);
+    setTooltipVisible(false);
   };
-  
-  const handleClick = () => { 
-    if (project.link) window.open(project.link, "_blank", "noopener noreferrer"); 
+
+  const handleClick = () => {
+    if (project.link) window.open(project.link, "_blank", "noopener noreferrer");
   };
-  
-  const handleKeyDown = (e) => { 
-    if (e.key === "Enter" || e.key === " ") { 
-      e.preventDefault(); 
-      handleClick(); 
-    } 
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleClick();
+    }
   };
 
   return (
@@ -185,7 +185,7 @@ function DesktopCard({ project }) {
           <Crosshatch className="w-full aspect-[4/3]" label="[ image missing ]" />
         )}
       </SketchCard>
-      
+
       {mounted && createPortal(
         <AnimatePresence>
           {tooltipVisible && (
@@ -238,12 +238,10 @@ function MobileCard({ project, onClick }) {
   );
 }
 
-// ---------- Main Projects Section ----------
+// ---------- Main Projects Section (filters removed) ----------
 export default function ProjectsSection() {
-  const [filter, setFilter] = useState("ALL");
   const [selectedProject, setSelectedProject] = useState(null);
   const isHoverCapable = useHoverCapable();
-  const filtered = filter === "ALL" ? PROJECTS : PROJECTS.filter((p) => p.tag === filter);
 
   return (
     <>
@@ -268,26 +266,11 @@ export default function ProjectsSection() {
                 ...a collection of works. Some finished, some ongoing, some just begun.
               </p>
             </motion.div>
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-2 mb-12">
-              {PROJECT_FILTERS.map((f) => (
-                <button
-                  key={f}
-                  onClick={() => setFilter(f)}
-                  className={[
-                    "font-mono text-[0.6rem] tracking-widest px-4 py-2 border transition-all duration-200 rounded-[1px]",
-                    filter === f
-                      ? "bg-ink text-bone border-ink"
-                      : "bg-transparent text-void border-smudge hover:border-fog hover:text-void",
-                  ].join(" ")}
-                >
-                  {f}
-                </button>
-              ))}
-            </motion.div>
+            {/* Filter buttons have been removed */}
           </motion.div>
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence mode="popLayout">
-              {filtered.map((project, i) => (
+              {PROJECTS.map((project, i) => (
                 <motion.div
                   key={project.title}
                   layout

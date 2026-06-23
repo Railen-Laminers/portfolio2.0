@@ -64,14 +64,6 @@ export default function App() {
             <Route path="/certificates" element={<CertificatesSection />} />
           </Routes>
         </AnimatePresence>
-
-        {!isHome && (
-          <footer className="border-t border-ash bg-paper px-6 py-5 flex justify-between items-center">
-            <span className="font-mono text-[0.55rem] text-smudge tracking-widest">
-              ...
-            </span>
-          </footer>
-        )}
       </div>
     </div>
   );
