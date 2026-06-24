@@ -1,8 +1,7 @@
 // src/data/minigamesData.js
 
-// If you have local images for your games, import them here.
-// Example: import flappyPreview from "../assets/games/flappy-preview.png";
-// For now, we'll use null and let the Crosshatch component act as a placeholder.
+import flapImg from "../assets/minigames/flap.png";
+import tomoImg from "../assets/minigames/tomo.png";
 
 export const MINIGAMES = [
     {
@@ -14,7 +13,7 @@ export const MINIGAMES = [
         rotate: -0.3,           // slight left tilt
         desc: "Hangout with your friends and chat anonymously.",
         link: "https://tomori-frontend.vercel.app/",   // external link
-        image: null,            // no local preview image – will show placeholder
+        image: tomoImg,            // no local preview image – will show placeholder
     },
     {
         id: "flappybird",
@@ -25,7 +24,7 @@ export const MINIGAMES = [
         rotate: 0.5,
         desc: "Avoid the pipes. How far can you go? A faithful remake with a sketchy twist.",
         link: "/minigames/flappybird",   // internal React Router link
-        image: null,
+        image: flapImg,
     },
     // Add more games here following the same structure
 ];
