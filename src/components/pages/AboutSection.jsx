@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaGithub, FaFacebook, FaFileAlt } from "react-icons/fa";
+import { FaGithub, FaFacebook, FaLinkedin, FaFileAlt } from "react-icons/fa"; // added FaLinkedin
 
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
@@ -68,13 +68,15 @@ export default function AboutSection() {
 
                         {/* icon-only links with tooltips */}
                         <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mt-8">
+                            {/* Certificates button – icon + text */}
                             <button
                                 onClick={() => navigate("/certificates")}
-                                className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                className="flex items-center gap-2 font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
                                 title="View Certificates"
                                 aria-label="Certificates"
                             >
                                 <FaFileAlt />
+                                <span>Certificates</span>
                             </button>
                             <a
                                 href="https://github.com/Railen-Laminers"
@@ -95,6 +97,17 @@ export default function AboutSection() {
                                 aria-label="Facebook"
                             >
                                 <FaFacebook />
+                            </a>
+                            {/* LinkedIn link added here */}
+                            <a
+                                href="https://www.linkedin.com/in/laminero-railen-cype-m-84706941a/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                title="LinkedIn Profile"
+                                aria-label="LinkedIn"
+                            >
+                                <FaLinkedin />
                             </a>
                         </motion.div>
                     </div>
