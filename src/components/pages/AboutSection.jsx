@@ -100,7 +100,7 @@ export default function AboutSection() {
                             </a>
                             {/* LinkedIn link added here */}
                             <a
-                                href="https://www.linkedin.com/in/laminero-railen-cype-m-84706941a/"
+                                href="https://www.linkedin.com/in/laminero-railen-cype/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
