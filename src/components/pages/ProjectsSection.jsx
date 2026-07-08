@@ -177,12 +177,12 @@ function DesktopCard({ project }) {
           <img
             src={project.image}
             alt={project.title}
-            className="w-full aspect-[4/3] object-cover rounded-[2px] border border-smudge"
+            className="w-full aspect-[3/2] object-cover rounded-[2px] border border-smudge"
             onError={() => setImgError(true)}
             loading="lazy"
           />
         ) : (
-          <Crosshatch className="w-full aspect-[4/3]" label="[ image missing ]" />
+          <Crosshatch className="w-full aspect-[3/2]" label="[ image missing ]" />
         )}
       </SketchCard>
 
@@ -226,12 +226,12 @@ function MobileCard({ project, onClick }) {
           <img
             src={project.image}
             alt={project.title}
-            className="w-full aspect-[4/3] object-cover rounded-[2px] border border-smudge"
+            className="w-full aspect-[3/2] object-cover rounded-[2px] border border-smudge"
             onError={() => setImgError(true)}
             loading="lazy"
           />
         ) : (
-          <Crosshatch className="w-full aspect-[4/3]" label="[ image missing ]" />
+          <Crosshatch className="w-full aspect-[3/2]" label="[ image missing ]" />
         )}
       </SketchCard>
     </div>
