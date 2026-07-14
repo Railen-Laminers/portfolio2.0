@@ -1,6 +1,7 @@
-import { useEffect, useMemo, memo } from "react";
+import { useEffect, useMemo, memo, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import Lenis from "@studio-freight/lenis";
 import HeroSection from "./components/pages/HeroSection";
 import AboutSection from "./components/pages/AboutSection";
 import ProjectsSection from "./components/pages/ProjectsSection";
@@ -9,7 +10,6 @@ import MiniGamesSection from "./components/pages/MiniGamesSection";
 import CertificatesSection from "./components/pages/CertificatesSection";
 import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
-
 
 // Memoized background component – stays fixed and never re‑renders during navigation
 const NotebookBackground = memo(() => {
@@ -37,9 +37,35 @@ const NotebookBackground = memo(() => {
 export default function App() {
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const lenisRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
+    const lenis = new Lenis({
+      lerp: 0.08,
+      duration: 1.2,
+      smoothWheel: true,
+      wheelMultiplier: 1.2,
+      easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+    });
+    lenisRef.current = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  // Smooth scroll to top on route change
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { duration: 0.8 });
+    }
   }, [location.pathname]);
 
   return (
