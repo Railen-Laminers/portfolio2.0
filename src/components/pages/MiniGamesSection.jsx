@@ -23,7 +23,7 @@ function useHoverCapable() {
     return isHoverCapable;
 }
 
-// ---------- Modal for mobile ----------
+// ---------- Modal (same for desktop & mobile, scrollbar stays) ----------
 function GameModal({ game, onClose }) {
     useEffect(() => {
         const handleEscape = (e) => { if (e.key === "Escape") onClose(); };
@@ -31,10 +31,7 @@ function GameModal({ game, onClose }) {
         return () => document.removeEventListener("keydown", handleEscape);
     }, [onClose]);
 
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => { document.body.style.overflow = "unset"; };
-    }, []);
+    // ✅ No overflow:hidden – scrollbar stays visible
 
     const isExternal = game.link?.startsWith("http");
     const buttonText = isExternal ? "launch game ↗" : "play game →";
@@ -102,8 +99,8 @@ function GameModal({ game, onClose }) {
     );
 }
 
-// ---------- Desktop card with hover tooltip (no scale) ----------
-function DesktopGameCard({ game }) {
+// ---------- Desktop card with hover tooltip (click opens modal) ----------
+function DesktopGameCard({ game, onClick }) {
     const [imgError, setImgError] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -111,9 +108,6 @@ function DesktopGameCard({ game }) {
     const [mounted, setMounted] = useState(false);
     const tooltipRef = useRef(null);
     const showTimeout = useRef(null);
-    const navigate = useNavigate();
-
-    const isExternal = game.link?.startsWith("http");
 
     useEffect(() => {
         setMounted(true);
@@ -165,13 +159,8 @@ function DesktopGameCard({ game }) {
     };
 
     const handleClick = () => {
-        if (game.link) {
-            if (isExternal) {
-                window.open(game.link, "_blank", "noopener noreferrer");
-            } else {
-                navigate(game.link);
-            }
-        }
+        // ✅ Open modal instead of redirecting
+        onClick();
     };
 
     const handleKeyDown = (e) => {
@@ -233,7 +222,7 @@ function DesktopGameCard({ game }) {
     );
 }
 
-// ---------- Mobile card (opens modal, no scale) ----------
+// ---------- Mobile card (opens modal) ----------
 function MobileGameCard({ game, onClick }) {
     const [imgError, setImgError] = useState(false);
     const handleKeyDown = (e) => {
@@ -267,6 +256,7 @@ function MobileGameCard({ game, onClick }) {
     );
 }
 
+// ---------- Main MiniGames Section ----------
 export default function MiniGamesSection() {
     const [selectedGame, setSelectedGame] = useState(null);
     const isHoverCapable = useHoverCapable();
@@ -295,6 +285,7 @@ export default function MiniGamesSection() {
                             </p>
                         </motion.div>
                     </motion.div>
+
                     <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         <AnimatePresence mode="popLayout">
                             {MINIGAMES.map((game, i) => (
@@ -306,7 +297,7 @@ export default function MiniGamesSection() {
                                     exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.25 } }}
                                 >
                                     {isHoverCapable ? (
-                                        <DesktopGameCard game={game} />
+                                        <DesktopGameCard game={game} onClick={() => setSelectedGame(game)} />
                                     ) : (
                                         <MobileGameCard game={game} onClick={() => setSelectedGame(game)} />
                                     )}
@@ -314,6 +305,7 @@ export default function MiniGamesSection() {
                             ))}
                         </AnimatePresence>
                     </motion.div>
+
                     <DashedRule />
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -330,8 +322,12 @@ export default function MiniGamesSection() {
                     </motion.div>
                 </div>
             </motion.div>
+
+            {/* Modal now shown on both desktop and mobile, with scrollbar intact */}
             <AnimatePresence>
-                {!isHoverCapable && selectedGame && <GameModal game={selectedGame} onClose={() => setSelectedGame(null)} />}
+                {selectedGame && (
+                    <GameModal game={selectedGame} onClose={() => setSelectedGame(null)} />
+                )}
             </AnimatePresence>
         </>
     );

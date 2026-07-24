@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
-import { PROJECTS } from "../../data/projectsData"; // PROJECT_FILTERS removed
+import { PROJECTS } from "../../data/projectsData";
 import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
 import Crosshatch from "../common/Crosshatch";
@@ -23,7 +23,7 @@ function useHoverCapable() {
   return isHoverCapable;
 }
 
-// ---------- Modal for mobile (matches tooltip layout, no image) ----------
+// ---------- Modal (same for desktop & mobile, scrollbar remains) ----------
 function ProjectModal({ project, onClose }) {
   useEffect(() => {
     const handleEscape = (e) => { if (e.key === "Escape") onClose(); };
@@ -31,10 +31,7 @@ function ProjectModal({ project, onClose }) {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = "unset"; };
-  }, []);
+  // ✅ No overflow:hidden – scrollbar stays visible
 
   return (
     <motion.div
@@ -50,7 +47,7 @@ function ProjectModal({ project, onClose }) {
         exit={{ scale: 0.9, y: 20, opacity: 0 }}
         transition={{ type: "spring", damping: 25, stiffness: 300 }}
         onClick={(e) => e.stopPropagation()}
-        className="relative max-w-[280px] w-full" // Matches tooltip width
+        className="relative max-w-[280px] w-full"
       >
         <SketchCard rotate={0} accent={project.accent} className="p-0">
           <button
@@ -61,7 +58,6 @@ function ProjectModal({ project, onClose }) {
             ✕
           </button>
           <div className="p-4">
-            {/* Exact same layout and fonts as the desktop tooltip */}
             <div className="inline-block">
               <TapeStrip color={project.accent} className="font-mono text-[0.55rem] tracking-wider">{project.tag}</TapeStrip>
             </div>
@@ -69,7 +65,6 @@ function ProjectModal({ project, onClose }) {
             <p className="font-mono text-[0.55rem] text-void/60 mt-0.5">{project.year}</p>
             <p className="font-sans text-[0.7rem] text-void/80 mt-2 leading-relaxed whitespace-normal mb-4">{project.desc}</p>
 
-            {/* Kept the link button so users can still view the project on mobile */}
             {project.link ? (
               <a
                 href={project.link}
@@ -91,8 +86,8 @@ function ProjectModal({ project, onClose }) {
   );
 }
 
-// ---------- Desktop card with hover tooltip (solid bg, no scaling) ----------
-function DesktopCard({ project }) {
+// ---------- Desktop card with hover tooltip (click opens modal) ----------
+function DesktopCard({ project, onClick }) {
   const [imgError, setImgError] = useState(false);
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -151,7 +146,8 @@ function DesktopCard({ project }) {
   };
 
   const handleClick = () => {
-    if (project.link) window.open(project.link, "_blank", "noopener noreferrer");
+    // ✅ Open modal instead of redirecting
+    onClick();
   };
 
   const handleKeyDown = (e) => {
@@ -238,7 +234,7 @@ function MobileCard({ project, onClick }) {
   );
 }
 
-// ---------- Main Projects Section (filters removed) ----------
+// ---------- Main Projects Section ----------
 export default function ProjectsSection() {
   const [selectedProject, setSelectedProject] = useState(null);
   const isHoverCapable = useHoverCapable();
@@ -266,8 +262,8 @@ export default function ProjectsSection() {
                 ...a collection of works. Some finished, some ongoing, some just begun.
               </p>
             </motion.div>
-            {/* Filter buttons have been removed */}
           </motion.div>
+
           <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence mode="popLayout">
               {PROJECTS.map((project, i) => (
@@ -279,7 +275,7 @@ export default function ProjectsSection() {
                   exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.25 } }}
                 >
                   {isHoverCapable ? (
-                    <DesktopCard project={project} />
+                    <DesktopCard project={project} onClick={() => setSelectedProject(project)} />
                   ) : (
                     <MobileCard project={project} onClick={setSelectedProject} />
                   )}
@@ -287,6 +283,7 @@ export default function ProjectsSection() {
               ))}
             </AnimatePresence>
           </motion.div>
+
           <DashedRule />
           <motion.div
             initial={{ opacity: 0 }}
@@ -303,8 +300,10 @@ export default function ProjectsSection() {
           </motion.div>
         </div>
       </motion.div>
+
+      {/* Modal is now shown on both desktop and mobile, without hiding the scrollbar */}
       <AnimatePresence>
-        {!isHoverCapable && selectedProject && (
+        {selectedProject && (
           <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
         )}
       </AnimatePresence>

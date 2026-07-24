@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaGithub, FaFacebook, FaLinkedin, FaFileAlt } from "react-icons/fa"; // added FaLinkedin
+import { FaGithub, FaFacebook, FaLinkedin, FaFileAlt } from "react-icons/fa";
 
 import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
@@ -10,6 +10,9 @@ import Crosshatch from "../common/Crosshatch";
 import SketchCard from "../common/SketchCard";
 import DashedRule from "../common/DashedRule";
 import profileImg from "/profile.jpg";
+
+// Make sure your PDF is placed inside src/assets/resume/
+import resume from "../../assets/resume/myResume.pdf";
 
 export default function AboutSection() {
     const [imgError, setImgError] = useState(false);
@@ -30,7 +33,7 @@ export default function AboutSection() {
                     animate="show"
                     className="grid grid-cols-1 md:grid-cols-[1fr_380px] gap-16 items-start"
                 >
-                    {/* left column */}
+                    {/* Left column */}
                     <div>
                         <motion.div variants={fadeUp}>
                             <SectionLabel>○ about</SectionLabel>
@@ -38,15 +41,26 @@ export default function AboutSection() {
                                 className="font-display italic text-ink leading-[1.1] mb-8"
                                 style={{ fontSize: "clamp(2.8rem, 6vw, 5rem)" }}
                             >
-                                railen
+                               Railen Cype
                             </h1>
                         </motion.div>
 
-                        <motion.p variants={fadeUp} className="font-serif text-[1.05rem] text-void leading-[1.85] mb-6">
-                            I approach every project with consistency, attention to detail, and a commitment to continuous improvement — showing up, refining the work, and solving problems as they arise. Building has taught me that meaningful results come not from flashiness, but from reliability, discipline, and the willingness to improve day after day.
+                        <motion.p
+                            variants={fadeUp}
+                            className="font-serif text-[1.05rem] text-void leading-[1.85] mb-6"
+                        >
+                            I approach every project with consistency, attention to detail,
+                            and a commitment to continuous improvement — showing up,
+                            refining the work, and solving problems as they arise. Building
+                            has taught me that meaningful results come not from flashiness,
+                            but from reliability, discipline, and the willingness to improve
+                            day after day.
                         </motion.p>
 
-                        <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-10">
+                        <motion.div
+                            variants={fadeUp}
+                            className="flex flex-wrap gap-3 mb-10"
+                        >
                             {["DEVELOPER", "SOMETHING ELSE"].map((tag, i) => {
                                 const colors = ["#d4c9e8", "#c8d9c4", "#e8cdd4"];
                                 return (
@@ -57,18 +71,24 @@ export default function AboutSection() {
                             })}
                         </motion.div>
 
-                        <motion.div variants={fadeUp} className="border-l-2 border-smudge pl-5">
+                        <motion.div
+                            variants={fadeUp}
+                            className="border-l-2 border-smudge pl-5"
+                        >
                             <p className="font-mono text-[0.6rem] text-void tracking-widest mb-1">
                                 CURRENTLY LOCATED IN
                             </p>
                             <p className="font-serif italic text-void text-[1rem]">
-                                Laguna
+                                Cabuyao City of Laguna
                             </p>
                         </motion.div>
 
-                        {/* icon-only links with tooltips */}
-                        <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mt-8">
-                            {/* Certificates button – icon + text */}
+                        {/* Icon + button row */}
+                        <motion.div
+                            variants={fadeUp}
+                            className="flex flex-wrap gap-3 mt-8"
+                        >
+                            {/* Certificates button */}
                             <button
                                 onClick={() => navigate("/certificates")}
                                 className="flex items-center gap-2 font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
@@ -78,6 +98,20 @@ export default function AboutSection() {
                                 <FaFileAlt />
                                 <span>Certificates</span>
                             </button>
+
+                            {/* 🆕 Resume download button */}
+                            <a
+                                href={resume}
+                                download
+                                className="flex items-center gap-2 font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
+                                title="Download Resume"
+                                aria-label="Resume"
+                            >
+                                <FaFileAlt />
+                                <span>Resume</span>
+                            </a>
+
+                            {/* Social links */}
                             <a
                                 href="https://github.com/Railen-Laminers"
                                 target="_blank"
@@ -89,7 +123,7 @@ export default function AboutSection() {
                                 <FaGithub />
                             </a>
                             <a
-                                href="https://facebook.com/railen"
+                                href="https://www.facebook.com/railen.laminero/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center justify-center font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
@@ -98,7 +132,6 @@ export default function AboutSection() {
                             >
                                 <FaFacebook />
                             </a>
-                            {/* LinkedIn link added here */}
                             <a
                                 href="https://www.linkedin.com/in/laminero-railen-cype/"
                                 target="_blank"
@@ -112,8 +145,11 @@ export default function AboutSection() {
                         </motion.div>
                     </div>
 
-                    {/* right column – profile image + sticky note */}
-                    <motion.div variants={fadeUp} className="flex flex-col gap-5 items-center md:items-stretch">
+                    {/* Right column – portrait + sticky note */}
+                    <motion.div
+                        variants={fadeUp}
+                        className="flex flex-col gap-5 items-center md:items-stretch"
+                    >
                         <div className="relative max-w-[260px] mx-auto md:max-w-none w-full md:w-auto">
                             {!imgError ? (
                                 <img
@@ -134,7 +170,6 @@ export default function AboutSection() {
                             <div className="absolute -bottom-2 right-4 w-10 h-3 bg-[#e8cdd4] opacity-60 rotate-[1.5deg]" />
                         </div>
 
-                        {/* sticky note */}
                         <SketchCard rotate={-0.6} accent="#e8d4c8" className="mt-2">
                             <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">
                                 STICKY NOTE /
@@ -148,6 +183,7 @@ export default function AboutSection() {
 
                 <DashedRule />
 
+                {/* Skills grid */}
                 <motion.div
                     variants={stagger}
                     initial="hidden"
@@ -156,10 +192,22 @@ export default function AboutSection() {
                     className="grid grid-cols-2 md:grid-cols-4 gap-6"
                 >
                     {[
-                        { label: "LANGUAGES", items: ["Html", "Css", "JavaScript", "Php", "Python", "..."] },
-                        { label: "FRAMEWORKS", items: ["Express", "React", "Node.js", "Laravel", "..."] },
-                        { label: "Database", items: ["MySQL", "Mongo", "Postgre", "..."] },
-                        { label: "INTERESTS", items: ["Gaming", "Coding", "Reading", "..."] },
+                        {
+                            label: "LANGUAGES",
+                            items: ["Html", "Css", "JavaScript", "Php", "Python", "..."],
+                        },
+                        {
+                            label: "FRAMEWORKS",
+                            items: ["Express", "React", "Node.js", "Laravel", "..."],
+                        },
+                        {
+                            label: "Database",
+                            items: ["MySQL", "Mongo", "Postgre", "..."],
+                        },
+                        {
+                            label: "INTERESTS",
+                            items: ["Gaming", "Coding", "Reading", "..."],
+                        },
                     ].map((col, i) => (
                         <motion.div key={i} variants={fadeUp}>
                             <SectionLabel>{col.label}</SectionLabel>

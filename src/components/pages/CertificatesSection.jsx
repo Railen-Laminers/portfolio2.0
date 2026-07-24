@@ -22,7 +22,7 @@ function useHoverCapable() {
     return isHoverCapable;
 }
 
-// ---------- Modal for mobile ----------
+// ---------- Modal (same for desktop & mobile, scrollbar stays) ----------
 function CertificateModal({ cert, onClose }) {
     useEffect(() => {
         const handleEscape = (e) => { if (e.key === "Escape") onClose(); };
@@ -30,10 +30,7 @@ function CertificateModal({ cert, onClose }) {
         return () => document.removeEventListener("keydown", handleEscape);
     }, [onClose]);
 
-    useEffect(() => {
-        document.body.style.overflow = "hidden";
-        return () => { document.body.style.overflow = "unset"; };
-    }, []);
+    // ✅ No overflow:hidden – scrollbar stays visible
 
     return (
         <motion.div
@@ -91,8 +88,8 @@ function CertificateModal({ cert, onClose }) {
     );
 }
 
-// ---------- Desktop card with hover tooltip (no scale) ----------
-function DesktopCertCard({ cert }) {
+// ---------- Desktop card with hover tooltip (click opens modal) ----------
+function DesktopCertCard({ cert, onClick }) {
     const [imgError, setImgError] = useState(false);
     const [tooltipVisible, setTooltipVisible] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
@@ -151,7 +148,8 @@ function DesktopCertCard({ cert }) {
     };
 
     const handleClick = () => {
-        if (cert.link) window.open(cert.link, "_blank", "noopener noreferrer");
+        // ✅ Open modal instead of redirecting
+        onClick();
     };
 
     const handleKeyDown = (e) => {
@@ -216,7 +214,7 @@ function DesktopCertCard({ cert }) {
     );
 }
 
-// ---------- Mobile card (opens modal, no scale) ----------
+// ---------- Mobile card (opens modal) ----------
 function MobileCertCard({ cert, onClick }) {
     const [imgError, setImgError] = useState(false);
     const handleKeyDown = (e) => {
@@ -250,6 +248,7 @@ function MobileCertCard({ cert, onClick }) {
     );
 }
 
+// ---------- Main Certificates Section ----------
 export default function CertificatesSection() {
     const [selectedCert, setSelectedCert] = useState(null);
     const isHoverCapable = useHoverCapable();
@@ -278,6 +277,7 @@ export default function CertificatesSection() {
                             </p>
                         </motion.div>
                     </motion.div>
+
                     <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                         <AnimatePresence mode="popLayout">
                             {CERTIFICATES.map((cert, i) => (
@@ -289,7 +289,7 @@ export default function CertificatesSection() {
                                     exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.25 } }}
                                 >
                                     {isHoverCapable ? (
-                                        <DesktopCertCard cert={cert} />
+                                        <DesktopCertCard cert={cert} onClick={() => setSelectedCert(cert)} />
                                     ) : (
                                         <MobileCertCard cert={cert} onClick={() => setSelectedCert(cert)} />
                                     )}
@@ -297,6 +297,7 @@ export default function CertificatesSection() {
                             ))}
                         </AnimatePresence>
                     </motion.div>
+
                     <DashedRule />
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -313,8 +314,12 @@ export default function CertificatesSection() {
                     </motion.div>
                 </div>
             </motion.div>
+
+            {/* Modal now shown on both desktop and mobile, with scrollbar intact */}
             <AnimatePresence>
-                {!isHoverCapable && selectedCert && <CertificateModal cert={selectedCert} onClose={() => setSelectedCert(null)} />}
+                {selectedCert && (
+                    <CertificateModal cert={selectedCert} onClose={() => setSelectedCert(null)} />
+                )}
             </AnimatePresence>
         </>
     );
