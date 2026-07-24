@@ -31,7 +31,7 @@ function ProjectModal({ project, onClose }) {
     return () => document.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  // ✅ No overflow:hidden – scrollbar stays visible
+  // No overflow:hidden – scrollbar stays visible
 
   return (
     <motion.div
@@ -146,7 +146,7 @@ function DesktopCard({ project, onClick }) {
   };
 
   const handleClick = () => {
-    // ✅ Open modal instead of redirecting
+    // Open modal instead of redirecting
     onClick();
   };
 

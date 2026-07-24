@@ -31,7 +31,7 @@ function GameModal({ game, onClose }) {
         return () => document.removeEventListener("keydown", handleEscape);
     }, [onClose]);
 
-    // ✅ No overflow:hidden – scrollbar stays visible
+    // No overflow:hidden – scrollbar stays visible
 
     const isExternal = game.link?.startsWith("http");
     const buttonText = isExternal ? "launch game ↗" : "play game →";
@@ -159,7 +159,7 @@ function DesktopGameCard({ game, onClick }) {
     };
 
     const handleClick = () => {
-        // ✅ Open modal instead of redirecting
+        // Open modal instead of redirecting
         onClick();
     };
 
