@@ -43,7 +43,7 @@ export const PROJECTS = [
         accent: "#d4c9e8",
         rotate: -0.2,
         desc: "A personal project showcasing a collection of fragrances, built with React and Tailwind CSS, featuring product details, reviews, and an interactive user interface for fragrance enthusiasts.",
-        link: "https://wel-fragrance.vercel.app/",
+        link: "https://wel-fragrance-collection.vercel.app/",
         image: welFragranceImg,
     },
 ];
