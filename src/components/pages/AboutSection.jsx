@@ -16,6 +16,7 @@ import resume from "../../assets/resume/myResume.pdf";
 
 export default function AboutSection() {
     const [imgError, setImgError] = useState(false);
+    const [showResumeModal, setShowResumeModal] = useState(false);
     const navigate = useNavigate();
 
     return (
@@ -99,17 +100,16 @@ export default function AboutSection() {
                                 <span>Certificates</span>
                             </button>
 
-                            {/* 🆕 Resume download button */}
-                            <a
-                                href={resume}
-                                download
+                            {/* 🆕 Resume preview button */}
+                            <button
+                                onClick={() => setShowResumeModal(true)}
                                 className="flex items-center gap-2 font-mono text-[0.9rem] text-void border border-smudge px-4 py-2 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
-                                title="Download Resume"
+                                title="Preview Resume"
                                 aria-label="Resume"
                             >
                                 <FaFileAlt />
                                 <span>Resume</span>
-                            </a>
+                            </button>
 
                             {/* Social links */}
                             <a
@@ -225,6 +225,52 @@ export default function AboutSection() {
                     ))}
                 </motion.div>
             </div>
+
+            {/* Resume Preview Modal */}
+            {showResumeModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+                    onClick={() => setShowResumeModal(false)}
+                >
+                    <div
+                        className="relative bg-white w-full max-w-4xl h-[90vh] rounded-lg overflow-hidden"
+                        onClick={(e) => e.stopPropagation()}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label="Resume Preview"
+                    >
+                        {/* Close button */}
+                        <button
+                            onClick={() => setShowResumeModal(false)}
+                            className="absolute top-2 right-2 z-10 bg-white rounded-full p-1 text-void hover:bg-smudge transition"
+                            aria-label="Close preview"
+                        >
+                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+
+                        {/* PDF Viewer */}
+                        <iframe
+                            src={resume}
+                            className="w-full h-full"
+                            title="Resume Preview"
+                        />
+
+                        {/* Download button inside modal */}
+                        <div className="absolute bottom-4 right-4 z-10">
+                            <a
+                                href={resume}
+                                download
+                                className="flex items-center gap-2 font-mono text-[0.9rem] text-bone bg-ink border border-smudge px-4 py-2 hover:bg-smudge hover:text-void transition-all duration-300 rounded-[1px]"
+                            >
+                                <FaFileAlt />
+                                <span>Download</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
         </motion.div>
     );
 }
