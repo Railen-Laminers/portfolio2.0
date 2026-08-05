@@ -2,6 +2,7 @@ import { useEffect, useMemo, memo, useRef } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Lenis from "@studio-freight/lenis";
+
 import HeroSection from "./components/pages/HeroSection";
 import AboutSection from "./components/pages/AboutSection";
 import ProjectsSection from "./components/pages/ProjectsSection";
@@ -11,7 +12,7 @@ import CertificatesSection from "./components/pages/CertificatesSection";
 import FlappyBird from "./components/games/FlappyBird";
 import Navigation from "./components/common/Navigation";
 
-// Memoized background component – stays fixed and never re‑renders during navigation
+// Memoized background component – stays fixed and never re-renders during navigation
 const NotebookBackground = memo(() => {
   const lineStyle = useMemo(
     () => ({
@@ -45,49 +46,57 @@ export default function App() {
       duration: 1.2,
       smoothWheel: true,
       wheelMultiplier: 1.2,
-      easing: (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
+      easing: (t) =>
+        t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t,
     });
+
     lenisRef.current = lenis;
+
+    let rafId;
 
     function raf(time) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);
 
-  // Smooth scroll to top on route change
-  useEffect(() => {
-    if (lenisRef.current) {
-      lenisRef.current.scrollTo(0, { duration: 0.8 });
-    }
-  }, [location.pathname]);
-
   return (
     <div className="relative min-h-screen bg-bone">
-      {/* Notebook background – now completely independent of routing & animations */}
+      {/* Notebook background */}
       <NotebookBackground />
 
       <div className="relative z-10">
         {!isHome && <Navigation />}
 
-        <AnimatePresence mode="wait" custom={location.pathname}>
+        <AnimatePresence
+          mode="wait"
+          onExitComplete={() => {
+            lenisRef.current?.scrollTo(0, {
+              immediate: true,
+            });
+          }}
+        >
           <Routes location={location} key={location.pathname}>
-            <Route
-              path="/"
-              element={<HeroSection />}
-            />
+            <Route path="/" element={<HeroSection />} />
             <Route path="/about" element={<AboutSection />} />
             <Route path="/projects" element={<ProjectsSection />} />
             <Route path="/contact" element={<ContactSection />} />
             <Route path="/minigames" element={<MiniGamesSection />} />
-            <Route path="/minigames/flappybird" element={<FlappyBird />} />
-            <Route path="/certificates" element={<CertificatesSection />} />
+            <Route
+              path="/minigames/flappybird"
+              element={<FlappyBird />}
+            />
+            <Route
+              path="/certificates"
+              element={<CertificatesSection />}
+            />
           </Routes>
         </AnimatePresence>
       </div>
