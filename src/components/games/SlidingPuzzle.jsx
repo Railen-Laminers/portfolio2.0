@@ -8,6 +8,7 @@ import DashedRule from "../common/DashedRule";
 
 const SIZE = 3;
 const TILE_COUNT = SIZE * SIZE;
+const CORNERS = [0, 2, 6, 8]; // top-left, top-right, bottom-left, bottom-right
 
 const TILE_INK = "var(--ink)";
 const TILE_PAPER = "var(--paper)";
@@ -15,11 +16,26 @@ const TILE_BONE = "var(--bone)";
 const TILE_SMUDGE = "var(--smudge)";
 const TILE_ACCENT = "#c4d4e8";
 
-const solvedBoard = () => Array.from({ length: TILE_COUNT }, (_, i) => (i + 1) % TILE_COUNT);
-const isSolved = (board) => board.every((v, i) => v === solvedBoard()[i]);
+// ------------------------------------------------------------
+//  Helpers
+// ------------------------------------------------------------
+
+// Build the solved board with blank at a given corner position.
+const solvedBoard = (blankPos) => {
+    const board = Array(TILE_COUNT).fill(0);
+    let num = 1;
+    for (let i = 0; i < TILE_COUNT; i++) {
+        if (i === blankPos) continue;
+        board[i] = num++;
+    }
+    return board;
+};
+
+const isSolved = (board, blankPos) => board.every((v, i) => v === solvedBoard(blankPos)[i]);
 
 const canSlide = (index, board) => {
     const blankIndex = board.indexOf(0);
+    if (blankIndex === -1) return false;
     const row = Math.floor(index / SIZE);
     const col = index % SIZE;
     const blankRow = Math.floor(blankIndex / SIZE);
@@ -30,12 +46,21 @@ const canSlide = (index, board) => {
     return (sameRow || sameCol) && adjacent;
 };
 
-const shuffleBoard = () => {
-    const board = solvedBoard().slice();
-    for (let i = board.length - 1; i > 0; i--) {
+// Shuffle numbers while keeping blank fixed at blankPos.
+const shuffleBoard = (blankPos) => {
+    const board = solvedBoard(blankPos).slice();
+    const numbers = board.filter((v) => v !== 0);
+    // Fisher–Yates shuffle
+    for (let i = numbers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [board[i], board[j]] = [board[j], board[i]];
+        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
     }
+    let idx = 0;
+    for (let i = 0; i < board.length; i++) {
+        if (i === blankPos) continue;
+        board[i] = numbers[idx++];
+    }
+    // Count inversions (ignoring blank)
     let inversions = 0;
     const tiles = board.filter((v) => v !== 0);
     for (let i = 0; i < tiles.length; i++) {
@@ -43,13 +68,23 @@ const shuffleBoard = () => {
             if (tiles[i] > tiles[j]) inversions++;
         }
     }
+    // Fix parity if odd
     if (inversions % 2 !== 0) {
-        const nonBlank = board.map((v, i) => ({ v, i })).filter((o) => o.v !== 0);
-        const a = nonBlank[0].i;
-        const b = nonBlank[1].i;
+        const nonBlankIndices = board
+            .map((v, i) => ({ v, i }))
+            .filter((o) => o.v !== 0)
+            .map((o) => o.i);
+        const a = nonBlankIndices[0];
+        const b = nonBlankIndices[1];
         [board[a], board[b]] = [board[b], board[a]];
     }
     return board;
+};
+
+// Create new game with a random corner blank.
+const createNewGame = () => {
+    const blankPos = CORNERS[Math.floor(Math.random() * CORNERS.length)];
+    return { blankPos, board: shuffleBoard(blankPos) };
 };
 
 const formatTime = (seconds) => {
@@ -58,8 +93,15 @@ const formatTime = (seconds) => {
     return m > 0 ? `${m}:${String(s).padStart(2, "0")}` : `${s}s`;
 };
 
+// ------------------------------------------------------------
+//  Component
+// ------------------------------------------------------------
 export default function SlidingPuzzle() {
-    const [board, setBoard] = useState(() => shuffleBoard());
+    const [blankPos, setBlankPos] = useState(() => {
+        const { blankPos } = createNewGame();
+        return blankPos;
+    });
+    const [board, setBoard] = useState(() => shuffleBoard(blankPos));
     const [moves, setMoves] = useState(0);
     const [seconds, setSeconds] = useState(0);
     const [won, setWon] = useState(false);
@@ -71,6 +113,7 @@ export default function SlidingPuzzle() {
     const [drag, setDrag] = useState(null);
     const dragMovedRef = useRef(false);
 
+    // Timer
     useEffect(() => {
         if (won) {
             if (timerRef.current) clearInterval(timerRef.current);
@@ -84,13 +127,15 @@ export default function SlidingPuzzle() {
         };
     }, [won]);
 
-    const handleShuffle = useCallback(() => {
-        setBoard(shuffleBoard());
+    const handleNewGame = useCallback(() => {
+        const { blankPos: newBlank, board: newBoard } = createNewGame();
+        setBlankPos(newBlank);
+        setBoard(newBoard);
         setMoves(0);
         setWon(false);
         setWonTime(null);
-        startRef.current = Date.now();
         setSeconds(0);
+        startRef.current = Date.now();
     }, []);
 
     const handleTileClick = useCallback(
@@ -102,14 +147,15 @@ export default function SlidingPuzzle() {
             [next[index], next[blank]] = [next[blank], next[index]];
             setBoard(next);
             setMoves((m) => m + 1);
-            if (isSolved(next)) {
+            if (isSolved(next, blankPos)) {
                 setWon(true);
                 setWonTime(formatTime(Math.floor((Date.now() - startRef.current) / 1000)));
             }
         },
-        [board, won]
+        [board, won, blankPos]
     );
 
+    // Keyboard arrows
     const handleKeyDown = useCallback(
         (e) => {
             if (won) return;
@@ -134,6 +180,7 @@ export default function SlidingPuzzle() {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [handleKeyDown]);
 
+    // Drag handlers
     const handlePointerDown = (index, e) => {
         if (won) return;
         if (!canSlide(index, board)) return;
@@ -340,7 +387,7 @@ export default function SlidingPuzzle() {
                                                         {moves} moves · {wonTime ?? formatTime(seconds)}
                                                     </p>
                                                     <button
-                                                        onClick={handleShuffle}
+                                                        onClick={handleNewGame}
                                                         className="font-mono text-[0.62rem] tracking-[0.12em] text-void border border-smudge px-6 py-2.5 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
                                                     >
                                                         Play Again ↺
@@ -356,7 +403,7 @@ export default function SlidingPuzzle() {
                             </div>
                         </motion.div>
 
-                        {/* ---- Stats + Shuffle + Sample row (centered, full width) ---- */}
+                        {/* Stats + Shuffle + Sample row */}
                         <motion.div
                             variants={fadeUp}
                             className="w-full flex flex-wrap items-center justify-center gap-x-8 gap-y-4 mt-10"
@@ -376,7 +423,7 @@ export default function SlidingPuzzle() {
                                 </span>
                             </div>
                             <button
-                                onClick={handleShuffle}
+                                onClick={handleNewGame}
                                 className="font-mono text-[0.62rem] tracking-[0.12em] text-void border border-smudge px-5 py-2.5 hover:bg-ink hover:text-bone hover:border-ink transition-all duration-300 rounded-[1px]"
                             >
                                 shuffle ↺
@@ -430,7 +477,7 @@ export default function SlidingPuzzle() {
                                 className="grid grid-cols-3 gap-2 w-48 h-48 mx-auto"
                                 style={{ gridTemplateColumns: `repeat(3, 1fr)` }}
                             >
-                                {solvedBoard().map((val, idx) => (
+                                {solvedBoard(blankPos).map((val, idx) => (
                                     <div
                                         key={idx}
                                         className="flex items-center justify-center bg-paper border border-smudge rounded-sm text-ink text-xl font-serif italic"
