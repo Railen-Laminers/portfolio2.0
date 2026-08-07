@@ -10,6 +10,7 @@ import ContactSection from "./components/pages/ContactSection";
 import MiniGamesSection from "./components/pages/MiniGamesSection";
 import CertificatesSection from "./components/pages/CertificatesSection";
 import FlappyBird from "./components/games/FlappyBird";
+import SlidingPuzzle from "./components/games/SlidingPuzzle";
 import Navigation from "./components/common/Navigation";
 
 // Memoized background component – stays fixed and never re-renders during navigation
@@ -92,6 +93,10 @@ export default function App() {
             <Route
               path="/minigames/flappybird"
               element={<FlappyBird />}
+            />
+            <Route
+              path="/minigames/slidingpuzzle"
+              element={<SlidingPuzzle />}
             />
             <Route
               path="/certificates"

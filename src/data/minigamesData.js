@@ -26,6 +26,17 @@ export const MINIGAMES = [
         link: "/minigames/flappybird",   // internal React Router link
         image: flapImg,
     },
+    {
+        id: "slidingpuzzle",
+        title: "Sliding Puzzle",
+        year: "2025",
+        tag: "BRAIN TEASER",
+        accent: "#c4d4e8",      // soft sky blue
+        rotate: -0.4,
+        desc: "A 3×3 sliding puzzle. Slide the tiles and put the numbers back in order.",
+        link: "/minigames/slidingpuzzle",   // internal React Router link
+        // no image – will show crosshatch placeholder
+    },
     // Add more games here following the same structure
 ];
 
