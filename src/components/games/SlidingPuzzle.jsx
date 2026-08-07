@@ -5,10 +5,11 @@ import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
 import SketchCard from "../common/SketchCard";
 import DashedRule from "../common/DashedRule";
+import profileImg from "/profile.jpg";
 
 const SIZE = 3;
 const TILE_COUNT = SIZE * SIZE;
-const CORNERS = [0, 2, 6, 8]; // top-left, top-right, bottom-left, bottom-right
+const CORNERS = [0, 2, 6, 8];
 
 const TILE_INK = "var(--ink)";
 const TILE_PAPER = "var(--paper)";
@@ -20,7 +21,6 @@ const TILE_ACCENT = "#c4d4e8";
 //  Helpers
 // ------------------------------------------------------------
 
-// Build the solved board with blank at a given corner position.
 const solvedBoard = (blankPos) => {
     const board = Array(TILE_COUNT).fill(0);
     let num = 1;
@@ -46,11 +46,9 @@ const canSlide = (index, board) => {
     return (sameRow || sameCol) && adjacent;
 };
 
-// Shuffle numbers while keeping blank fixed at blankPos.
 const shuffleBoard = (blankPos) => {
     const board = solvedBoard(blankPos).slice();
     const numbers = board.filter((v) => v !== 0);
-    // Fisher–Yates shuffle
     for (let i = numbers.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
@@ -60,7 +58,6 @@ const shuffleBoard = (blankPos) => {
         if (i === blankPos) continue;
         board[i] = numbers[idx++];
     }
-    // Count inversions (ignoring blank)
     let inversions = 0;
     const tiles = board.filter((v) => v !== 0);
     for (let i = 0; i < tiles.length; i++) {
@@ -68,7 +65,6 @@ const shuffleBoard = (blankPos) => {
             if (tiles[i] > tiles[j]) inversions++;
         }
     }
-    // Fix parity if odd
     if (inversions % 2 !== 0) {
         const nonBlankIndices = board
             .map((v, i) => ({ v, i }))
@@ -81,10 +77,15 @@ const shuffleBoard = (blankPos) => {
     return board;
 };
 
-// Create new game with a random corner blank.
 const createNewGame = () => {
     const blankPos = CORNERS[Math.floor(Math.random() * CORNERS.length)];
     return { blankPos, board: shuffleBoard(blankPos) };
+};
+
+const getTilePosition = (value, blankPos) => {
+    const solved = solvedBoard(blankPos);
+    const index = solved.indexOf(value);
+    return { row: Math.floor(index / SIZE), col: index % SIZE };
 };
 
 const formatTime = (seconds) => {
@@ -251,6 +252,66 @@ export default function SlidingPuzzle() {
 
     const cellSize = "clamp(70px, 14vw, 120px)";
 
+    const renderTile = (value, index) => {
+        if (value === 0) {
+            return (
+                <motion.div
+                    key={`blank-${index}`}
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                    style={{
+                        gridColumnStart: (index % SIZE) + 1,
+                        gridRowStart: Math.floor(index / SIZE) + 1,
+                        backgroundImage:
+                            "repeating-linear-gradient(45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)," +
+                            "repeating-linear-gradient(-45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)",
+                        backgroundColor: "var(--ash)",
+                        border: "1px solid " + TILE_SMUDGE,
+                    }}
+                />
+            );
+        }
+
+        const { row, col } = getTilePosition(value, blankPos);
+        const bgPosX = -col * 100;
+        const bgPosY = -row * 100;
+
+        return (
+            <motion.button
+                key={value}
+                layout
+                onClick={() => {
+                    if (!dragMovedRef.current) {
+                        handleTileClick(index);
+                    }
+                    dragMovedRef.current = false;
+                }}
+                onMouseDown={(e) => handlePointerDown(index, e)}
+                onTouchStart={(e) => handlePointerDown(index, e)}
+                disabled={won}
+                className="focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
+                style={{
+                    gridColumnStart: (index % SIZE) + 1,
+                    gridRowStart: Math.floor(index / SIZE) + 1,
+                    backgroundImage: `url(${profileImg})`,
+                    backgroundSize: "300% 300%",
+                    backgroundPosition: `${bgPosX}% ${bgPosY}%`,
+                    border: "1px solid " + TILE_SMUDGE,
+                    boxShadow: "inset 0 0 0 0.5px rgba(26,26,26,0.03)",
+                    cursor: "pointer",
+                    transition: "background 0.2s ease, transform 0.2s ease",
+                    touchAction: "none",
+                    backgroundColor: TILE_PAPER,
+                }}
+                whileHover={{ y: -2, rotate: index % 2 ? -0.6 : 0.6 }}
+                whileTap={{ scale: 0.96 }}
+            />
+        );
+    };
+
     return (
         <>
             <motion.div
@@ -276,7 +337,7 @@ export default function SlidingPuzzle() {
                                 sliding<br />puzzle
                             </h2>
                             <p className="font-serif text-sm md:text-[1rem] text-void italic mb-8 max-w-md">
-                                ...a quiet square dance. put the numbers back in order.
+                                ...a quiet square dance. put the image back together.
                             </p>
                         </motion.div>
 
@@ -291,8 +352,8 @@ export default function SlidingPuzzle() {
                                             display: "grid",
                                             gridTemplateColumns: `repeat(${SIZE}, ${cellSize})`,
                                             gridTemplateRows: `repeat(${SIZE}, ${cellSize})`,
-                                            gap: "8px",
-                                            padding: "12px",
+                                            gap: "0",
+                                            padding: "0",
                                             background: TILE_BONE,
                                             border: "1px solid " + TILE_SMUDGE,
                                             borderRadius: "2px",
@@ -300,77 +361,7 @@ export default function SlidingPuzzle() {
                                         }}
                                     >
                                         <AnimatePresence>
-                                            {board.map((value, index) => {
-                                                if (value === 0) {
-                                                    return (
-                                                        <motion.div
-                                                            key={`blank-${index}`}
-                                                            layout
-                                                            initial={{ opacity: 0 }}
-                                                            animate={{ opacity: 1 }}
-                                                            exit={{ opacity: 0 }}
-                                                            transition={{ duration: 0.18 }}
-                                                            style={{
-                                                                gridColumnStart: (index % SIZE) + 1,
-                                                                gridRowStart: Math.floor(index / SIZE) + 1,
-                                                                backgroundImage:
-                                                                    "repeating-linear-gradient(45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)," +
-                                                                    "repeating-linear-gradient(-45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)",
-                                                                backgroundColor: "var(--ash)",
-                                                            }}
-                                                        />
-                                                    );
-                                                }
-                                                return (
-                                                    <motion.button
-                                                        key={value}
-                                                        layout
-                                                        onClick={() => {
-                                                            if (!dragMovedRef.current) {
-                                                                handleTileClick(index);
-                                                            }
-                                                            dragMovedRef.current = false;
-                                                        }}
-                                                        onMouseDown={(e) => handlePointerDown(index, e)}
-                                                        onTouchStart={(e) => handlePointerDown(index, e)}
-                                                        disabled={won}
-                                                        className="focus:outline-none focus-visible:ring-1 focus-visible:ring-ink"
-                                                        style={{
-                                                            gridColumnStart: (index % SIZE) + 1,
-                                                            gridRowStart: Math.floor(index / SIZE) + 1,
-                                                            background: TILE_PAPER,
-                                                            color: TILE_INK,
-                                                            border: "1px solid " + TILE_SMUDGE,
-                                                            borderRadius: "2px",
-                                                            fontSize: "clamp(1.3rem, 4vw, 1.9rem)",
-                                                            fontFamily: "'IM Fell English', Georgia, serif",
-                                                            fontStyle: "italic",
-                                                            boxShadow:
-                                                                "0 2px 6px rgba(26,26,26,0.07), inset 0 0 0 0.5px rgba(26,26,26,0.03)",
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            justifyContent: "center",
-                                                            cursor: "pointer",
-                                                            transition: "background 0.2s ease, color 0.2s ease",
-                                                            touchAction: "none",
-                                                        }}
-                                                        whileHover={{ y: -2, rotate: index % 2 ? -0.6 : 0.6 }}
-                                                        whileTap={{ scale: 0.96 }}
-                                                    >
-                                                        <AnimatePresence mode="wait">
-                                                            <motion.span
-                                                                key={value}
-                                                                initial={{ opacity: 0, y: 4 }}
-                                                                animate={{ opacity: 1, y: 0 }}
-                                                                exit={{ opacity: 0, y: -4 }}
-                                                                transition={{ duration: 0.16 }}
-                                                            >
-                                                                {value}
-                                                            </motion.span>
-                                                        </AnimatePresence>
-                                                    </motion.button>
-                                                );
-                                            })}
+                                            {board.map((value, index) => renderTile(value, index))}
                                         </AnimatePresence>
 
                                         <AnimatePresence>
@@ -380,7 +371,7 @@ export default function SlidingPuzzle() {
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     exit={{ opacity: 0, scale: 0.95 }}
                                                     transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                                                    className="absolute inset-0 flex flex-col items-center justify-center bg-bone/80 backdrop-blur-sm z-10 rounded-[2px] p-4 text-center"
+                                                    className="absolute inset-0 flex flex-col items-center justify-center bg-bone/80 backdrop-blur-sm z-10 p-4 text-center"
                                                 >
                                                     <p className="font-serif italic text-ink text-2xl md:text-3xl mb-1">Solved!</p>
                                                     <p className="font-mono text-sm text-void/70 mb-4">
@@ -474,25 +465,40 @@ export default function SlidingPuzzle() {
                         >
                             <h3 className="font-serif italic text-ink text-lg mb-4 text-center">Solved Puzzle</h3>
                             <div
-                                className="grid grid-cols-3 gap-2 w-48 h-48 mx-auto"
+                                className="grid grid-cols-3 gap-0 w-48 h-48 mx-auto"
                                 style={{ gridTemplateColumns: `repeat(3, 1fr)` }}
                             >
-                                {solvedBoard(blankPos).map((val, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center justify-center bg-paper border border-smudge rounded-sm text-ink text-xl font-serif italic"
-                                        style={{
-                                            aspectRatio: "1/1",
-                                            background: val === 0
-                                                ? `repeating-linear-gradient(45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px),
-                           repeating-linear-gradient(-45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)`
-                                                : TILE_PAPER,
-                                            backgroundColor: val === 0 ? "var(--ash)" : TILE_PAPER,
-                                        }}
-                                    >
-                                        {val !== 0 ? val : ""}
-                                    </div>
-                                ))}
+                                {solvedBoard(blankPos).map((val, idx) => {
+                                    if (val === 0) {
+                                        return (
+                                            <div
+                                                key={idx}
+                                                className="border border-smudge"
+                                                style={{
+                                                    aspectRatio: "1/1",
+                                                    backgroundImage:
+                                                        "repeating-linear-gradient(45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)," +
+                                                        "repeating-linear-gradient(-45deg, var(--smudge) 0, var(--smudge) 0.5px, transparent 0.5px, transparent 6px)",
+                                                    backgroundColor: "var(--ash)",
+                                                }}
+                                            />
+                                        );
+                                    }
+                                    const { row, col } = getTilePosition(val, blankPos);
+                                    return (
+                                        <div
+                                            key={idx}
+                                            className="border border-smudge"
+                                            style={{
+                                                aspectRatio: "1/1",
+                                                backgroundImage: `url(${profileImg})`,
+                                                backgroundSize: "300% 300%",
+                                                backgroundPosition: `${-col * 100}% ${-row * 100}%`,
+                                                backgroundColor: TILE_PAPER,
+                                            }}
+                                        />
+                                    );
+                                })}
                             </div>
                             <button
                                 onClick={() => setShowSample(false)}
