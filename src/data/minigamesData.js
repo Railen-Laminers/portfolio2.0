@@ -36,7 +36,7 @@ export const MINIGAMES = [
         tag: "BRAIN TEASER",
         accent: randomAccent(),
         rotate: randomRotate(),
-        desc: "A 3×3 sliding puzzle. Slide the tiles and put the numbers back in order.",
+        desc: "A 3×3 sliding puzzle. Slide the tiles and put them back in order.",
         link: "/minigames/slidingpuzzle",
         image: slidePuzzle,
     },
