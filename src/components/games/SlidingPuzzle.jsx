@@ -4,14 +4,12 @@ import { dreamCut, stagger, fadeUp } from "../../animations/variants";
 import SectionLabel from "../common/SectionLabel";
 import TapeStrip from "../common/TapeStrip";
 import SketchCard from "../common/SketchCard";
-import DashedRule from "../common/DashedRule";
 import profileImg from "/profile.jpg";
 
 const SIZE = 3;
 const TILE_COUNT = SIZE * SIZE;
 const CORNERS = [0, 2, 6, 8];
 
-const TILE_INK = "var(--ink)";
 const TILE_PAPER = "var(--paper)";
 const TILE_BONE = "var(--bone)";
 const TILE_SMUDGE = "var(--smudge)";
@@ -108,25 +106,36 @@ export default function SlidingPuzzle() {
     const [won, setWon] = useState(false);
     const [wonTime, setWonTime] = useState(null);
     const [showSample, setShowSample] = useState(false);
+    const [timerStarted, setTimerStarted] = useState(false); // NEW: timer only starts after first move
+
     const timerRef = useRef(null);
     const startRef = useRef(Date.now());
 
     const [drag, setDrag] = useState(null);
     const dragMovedRef = useRef(false);
 
-    // Timer
+    // Timer – runs only when timerStarted is true and not won
     useEffect(() => {
-        if (won) {
-            if (timerRef.current) clearInterval(timerRef.current);
+        if (won || !timerStarted) {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
             return;
         }
-        timerRef.current = setInterval(() => {
-            setSeconds(Math.floor((Date.now() - startRef.current) / 1000));
-        }, 1000);
+        // Start the interval if not already running
+        if (!timerRef.current) {
+            timerRef.current = setInterval(() => {
+                setSeconds(Math.floor((Date.now() - startRef.current) / 1000));
+            }, 1000);
+        }
         return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
         };
-    }, [won]);
+    }, [won, timerStarted]);
 
     const handleNewGame = useCallback(() => {
         const { blankPos: newBlank, board: newBoard } = createNewGame();
@@ -136,24 +145,39 @@ export default function SlidingPuzzle() {
         setWon(false);
         setWonTime(null);
         setSeconds(0);
-        startRef.current = Date.now();
+        setTimerStarted(false);          // reset timer start flag
+        startRef.current = Date.now();   // will be reset on first move
+        // Clear any running timer
+        if (timerRef.current) {
+            clearInterval(timerRef.current);
+            timerRef.current = null;
+        }
     }, []);
 
     const handleTileClick = useCallback(
         (index) => {
             if (won) return;
             if (!canSlide(index, board)) return;
+
+            // Start timer on first move
+            if (!timerStarted) {
+                setTimerStarted(true);
+                startRef.current = Date.now();
+            }
+
             const blank = board.indexOf(0);
             const next = board.slice();
             [next[index], next[blank]] = [next[blank], next[index]];
             setBoard(next);
             setMoves((m) => m + 1);
+
             if (isSolved(next, blankPos)) {
                 setWon(true);
-                setWonTime(formatTime(Math.floor((Date.now() - startRef.current) / 1000)));
+                const elapsed = Math.floor((Date.now() - startRef.current) / 1000);
+                setWonTime(formatTime(elapsed));
             }
         },
-        [board, won, blankPos]
+        [board, won, blankPos, timerStarted]
     );
 
     // Keyboard arrows
@@ -425,21 +449,6 @@ export default function SlidingPuzzle() {
                             >
                                 sample
                             </button>
-                        </motion.div>
-
-                        <DashedRule />
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1, transition: { duration: 0.6 } }}
-                            viewport={{ once: true }}
-                            className="flex justify-end mt-12 w-full"
-                        >
-                            <SketchCard rotate={-0.6} accent="#e8d4c8">
-                                <p className="font-mono text-[0.58rem] text-void tracking-widest mb-2">STICKY NOTE /</p>
-                                <p className="font-serif italic text-void text-[1.05rem] mb-4 max-w-sm mx-auto leading-relaxed">
-                                    ...a game of patience for restless hands.
-                                </p>
-                            </SketchCard>
                         </motion.div>
                     </motion.div>
                 </div>
