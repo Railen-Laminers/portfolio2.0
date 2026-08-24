@@ -92,10 +92,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Crosshair cursor */
-* {
-    cursor: crosshair;
-}
 
 a,
 button,
@@ -198,7 +194,3 @@ label {
         transition-duration: 0.01ms !important;
     }
 }
-
-
-
-/* Crimson Mode */
